@@ -1996,7 +1996,7 @@ async function submitAuth() {
   } catch (err) {
     const msg = err.message || '';
     if (msg.includes('Invalid login credentials') || msg.includes('invalid_credentials')) {
-      showAuthError('Wrong email or password. No account yet? Click Create account above.');
+      showAuthError('Wrong email or password. If you signed up with Google, use the Google button above.');
     } else if (msg.includes('User already registered') || msg.includes('already registered')) {
       _suppressWelcomeToast = false;
       showAuthError('An account with this email already exists. Switching to Sign in…');
