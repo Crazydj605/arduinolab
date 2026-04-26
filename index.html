@@ -1974,7 +1974,8 @@ async function submitAuth() {
   } catch (err) {
     const msg = err.message || '';
     if (msg.includes('Invalid login credentials') || msg.includes('invalid_credentials')) {
-      showAuthError('Wrong email or password. Try again.');
+      showAuthError('No account found with this email. Click Create account above to sign up.');
+      setTimeout(() => switchTab('signup'), 2000);
     } else if (msg.includes('User already registered') || msg.includes('already registered')) {
       showAuthError('An account with this email already exists. Sign in instead.');
     } else if (msg.includes('Email not confirmed')) {
