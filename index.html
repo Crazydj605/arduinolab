@@ -1958,9 +1958,10 @@ async function submitAuth() {
     if (authMode === 'signup') {
       const { data, error } = await supa.auth.signUp({ email, password });
       if (error) throw error;
+      // Automatically sign in right after account creation
+      const { error: signInError } = await supa.auth.signInWithPassword({ email, password });
       document.getElementById('auth-modal').style.display = 'none';
-      if (data.session) {
-        // Auto confirmed (email confirmation disabled in Supabase)
+      if (!signInError) {
         showToast('✓ Account created! Welcome to ArduinoLab.');
       } else {
         showToast('📧 Check your email to confirm your account!');
