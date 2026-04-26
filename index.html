@@ -2087,18 +2087,33 @@ document.addEventListener('keydown', e => {
 });
 
 // ── Gate lesson clicks for locked lessons ────────────────────────
-// Wrap openLesson lazily so it works regardless of script order
+// Server-side verification: re-query Supabase on every lesson open so
+// client-side variable manipulation cannot bypass the paywall.
+const _freeIds = new Set(['blink-led', 'button-input', 'potentiometer']);
 window.addEventListener('load', () => {
   if (typeof openLesson === 'function') {
     const _orig = openLesson;
-    openLesson = function(idx) {
+    openLesson = async function(idx) {
       const l = lessons[idx];
-      if (l.locked) {
-        if (!currentUser) openAuthModal('signup');
-        else goto('pricing');
-        return;
-      }
-      _orig(idx);
+
+      // Free lessons — no check needed
+      if (_freeIds.has(l.id)) { _orig(idx); return; }
+
+      // Verify the session JWT with Supabase (cannot be spoofed client-side)
+      const { data: { user } } = await supa.auth.getUser();
+      if (!user) { openAuthModal('signup'); return; }
+
+      // Re-fetch is_pro from the server for this verified user
+      try {
+        const { data } = await supa
+          .from('profiles')
+          .select('is_pro')
+          .eq('id', user.id)
+          .single();
+        if (data?.is_pro === true) { _orig(idx); return; }
+      } catch(e) { /* network error — deny access */ }
+
+      goto('pricing');
     };
   }
 });
@@ -4495,7 +4510,7 @@ function sendBot() {
   const val = input.value.trim();
   if (!val) return;
   const box = document.getElementById('botMessages');
-  box.innerHTML += `<div class="msg msg-user">${val}</div>`;
+  box.innerHTML += `<div class="msg msg-user">${escapeHtml(val)}</div>`;
   input.value = '';
   box.scrollTop = box.scrollHeight;
   setTimeout(() => {
