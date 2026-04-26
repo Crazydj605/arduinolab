@@ -1793,38 +1793,58 @@ let currentUser = null;
 let currentProfile = null;
 
 // ── Boot: check session on page load ─────────────────────────────
+let _sessionHandled = false;
+
 (async () => {
   const { data: { session } } = await supa.auth.getSession();
-  if (session) await handleSession(session);
+  if (session) {
+    _sessionHandled = true;
+    await handleSession(session);
+  }
 
-  // Listen for auth state changes (login, logout, token refresh)
-  supa.auth.onAuthStateChange(async (_event, session) => {
-    if (session) {
-      await handleSession(session);
-    } else {
+  supa.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_OUT') {
+      _sessionHandled = false;
       handleSignOut();
+      return;
+    }
+    if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+      if (event === 'SIGNED_IN') {
+        // Only show toast on actual sign in, not token refresh
+        await handleSession(session, true);
+      } else if (!_sessionHandled) {
+        // TOKEN_REFRESHED on first load — still need to set up UI
+        _sessionHandled = true;
+        await handleSession(session, false);
+      }
+    }
+    if (event === 'USER_UPDATED') {
+      await handleSession(session, false);
     }
   });
 })();
 
-async function handleSession(session) {
+async function handleSession(session, showWelcome = false) {
   currentUser = session.user;
+  _sessionHandled = true;
 
-  // Fetch pro status from profiles table
-  const { data: profile } = await supa
-    .from('profiles')
-    .select('is_pro, email')
-    .eq('id', currentUser.id)
-    .single();
+  try {
+    const { data: profile } = await supa
+      .from('profiles')
+      .select('is_pro, email')
+      .eq('id', currentUser.id)
+      .single();
+    currentProfile = profile;
+  } catch(e) {
+    currentProfile = { is_pro: false };
+  }
 
-  currentProfile = profile;
-
-  // Update UI
   updateNavUI();
 
-  // Unlock lessons if pro
-  if (profile?.is_pro) {
-    unlockAllLessons();
+  if (currentProfile?.is_pro) {
+    unlockAllLessons(showWelcome);
+  } else if (showWelcome) {
+    showToast('✓ Signed in successfully');
   }
 }
 
@@ -1832,87 +1852,86 @@ function handleSignOut() {
   currentUser = null;
   currentProfile = null;
   updateNavUI();
-  // Re-lock lessons
-  lessons.forEach(l => {
-    if (l.id !== 'blink-led' && l.id !== 'button-input' && l.id !== 'potentiometer') {
-      l.locked = true;
-    }
-  });
+  // Close user menu if open
+  const menu = document.getElementById('user-menu');
+  if (menu) menu.style.display = 'none';
+  // Re-lock all non-free lessons
+  const freeIds = ['blink-led', 'button-input', 'potentiometer'];
+  lessons.forEach(l => { l.locked = !freeIds.includes(l.id); });
   renderLessons();
+  showToast('Signed out');
 }
 
 function updateNavUI() {
   const signedOut = document.getElementById('auth-signed-out');
-  const signedIn = document.getElementById('auth-signed-in');
-  const avatar = document.getElementById('auth-avatar');
-  const emailEl = document.getElementById('user-menu-email');
-  const proBadge = document.getElementById('user-menu-pro-badge');
+  const signedIn  = document.getElementById('auth-signed-in');
+  const avatar    = document.getElementById('auth-avatar');
+  const emailEl   = document.getElementById('user-menu-email');
+  const proBadge  = document.getElementById('user-menu-pro-badge');
 
   if (currentUser) {
-    signedOut.style.display = 'none';
-    signedIn.style.display = 'flex';
-
-    // Avatar: initials from email
-    const email = currentUser.email || '';
-    const initials = email.slice(0, 2).toUpperCase();
-    avatar.textContent = initials;
-
+    signedOut.style.cssText = 'display:none';
+    signedIn.style.cssText  = 'display:flex;gap:10px;align-items:center;';
+    const email = currentUser.email || currentUser.user_metadata?.email || '';
+    // Show first letter of email, or first+second if available
+    const parts = email.split('@')[0];
+    avatar.textContent = parts.slice(0, 2).toUpperCase();
     if (emailEl) emailEl.textContent = email;
     if (proBadge) proBadge.style.display = currentProfile?.is_pro ? 'block' : 'none';
   } else {
-    signedOut.style.display = 'flex';
-    signedIn.style.display = 'none';
+    signedOut.style.cssText = 'display:flex;gap:10px;align-items:center;';
+    signedIn.style.cssText  = 'display:none;';
   }
 }
 
-function unlockAllLessons() {
+function unlockAllLessons(announce = true) {
   lessons.forEach(l => l.locked = false);
   renderLessons();
-  showToast('🎉 All lessons unlocked!');
+  if (announce) showToast('🎉 All lessons unlocked!');
 }
 
-// ── Auth modal controls ───────────────────────────────────────────
-let authMode = 'signin'; // 'signin' | 'signup'
+// ── Auth modal ───────────────────────────────────────────────────
+let authMode = 'signin';
 
 function openAuthModal(mode = 'signin') {
+  if (currentUser) return; // already signed in
   authMode = mode;
-  document.getElementById('auth-modal').style.display = 'grid';
+  const modal = document.getElementById('auth-modal');
+  modal.style.display = 'grid';
   document.getElementById('auth-error').style.display = 'none';
   document.getElementById('auth-email').value = '';
   document.getElementById('auth-password').value = '';
   switchTab(mode);
-  setTimeout(() => document.getElementById('auth-email').focus(), 100);
+  setTimeout(() => document.getElementById('auth-email').focus(), 150);
 }
 
 function closeAuthModal(e) {
-  if (e && e.target !== document.getElementById('auth-modal')) return;
-  document.getElementById('auth-modal').style.display = 'none';
+  // Close if clicking the backdrop (not the card inside)
+  if (e && e.currentTarget === e.target) {
+    document.getElementById('auth-modal').style.display = 'none';
+  } else if (!e) {
+    document.getElementById('auth-modal').style.display = 'none';
+  }
 }
 
 function switchTab(mode) {
   authMode = mode;
   const isSignin = mode === 'signin';
-
-  // Tab styling
   const signinTab = document.getElementById('tab-signin');
   const signupTab = document.getElementById('tab-signup');
+
   signinTab.style.borderBottomColor = isSignin ? 'var(--brand)' : 'transparent';
   signinTab.style.color = isSignin ? 'var(--brand)' : 'var(--ink-3)';
   signupTab.style.borderBottomColor = !isSignin ? 'var(--brand)' : 'transparent';
   signupTab.style.color = !isSignin ? 'var(--brand)' : 'var(--ink-3)';
 
-  // Title/sub
   document.getElementById('auth-modal-title').textContent = isSignin ? 'Welcome back' : 'Create your account';
-  document.getElementById('auth-modal-sub').textContent = isSignin
+  document.getElementById('auth-modal-sub').textContent   = isSignin
     ? 'Sign in to access your lessons.'
     : 'Free account. 3 lessons included.';
-
-  // Button
-  document.getElementById('auth-submit-btn').textContent = isSignin ? 'Sign in' : 'Create account';
-  document.getElementById('auth-forgot').style.display = isSignin ? 'block' : 'none';
-
-  // Clear error
-  document.getElementById('auth-error').style.display = 'none';
+  document.getElementById('auth-submit-btn').textContent  = isSignin ? 'Sign in' : 'Create account';
+  document.getElementById('auth-forgot').style.display    = isSignin ? 'block' : 'none';
+  document.getElementById('auth-error').style.display     = 'none';
 }
 
 function showAuthError(msg) {
@@ -1921,13 +1940,14 @@ function showAuthError(msg) {
   el.style.display = 'block';
 }
 
-// ── Submit email/password ─────────────────────────────────────────
+// ── Email/password submit ────────────────────────────────────────
 async function submitAuth() {
-  const email = document.getElementById('auth-email').value.trim();
+  const email    = document.getElementById('auth-email').value.trim();
   const password = document.getElementById('auth-password').value;
-  const btn = document.getElementById('auth-submit-btn');
+  const btn      = document.getElementById('auth-submit-btn');
 
-  if (!email || !password) { showAuthError('Please enter your email and password.'); return; }
+  if (!email)          { showAuthError('Please enter your email address.'); return; }
+  if (!password)       { showAuthError('Please enter your password.'); return; }
   if (password.length < 6) { showAuthError('Password must be at least 6 characters.'); return; }
 
   btn.textContent = 'Please wait…';
@@ -1935,96 +1955,96 @@ async function submitAuth() {
   document.getElementById('auth-error').style.display = 'none';
 
   try {
-    let result;
     if (authMode === 'signup') {
-      result = await supa.auth.signUp({ email, password });
-      if (result.error) throw result.error;
-      if (result.data.user && !result.data.session) {
-        // Email confirmation required
-        document.getElementById('auth-modal').style.display = 'none';
+      const { data, error } = await supa.auth.signUp({ email, password });
+      if (error) throw error;
+      document.getElementById('auth-modal').style.display = 'none';
+      if (data.session) {
+        // Auto confirmed (email confirmation disabled in Supabase)
+        showToast('✓ Account created! Welcome to ArduinoLab.');
+      } else {
         showToast('📧 Check your email to confirm your account!');
-        return;
       }
     } else {
-      result = await supa.auth.signInWithPassword({ email, password });
-      if (result.error) throw result.error;
+      const { data, error } = await supa.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      document.getElementById('auth-modal').style.display = 'none';
+      // handleSession fires via onAuthStateChange
     }
-    document.getElementById('auth-modal').style.display = 'none';
-    showToast('✓ Signed in successfully');
   } catch (err) {
-    const msg = err.message || 'Something went wrong.';
-    if (msg.includes('Invalid login')) showAuthError('Wrong email or password.');
-    else if (msg.includes('already registered')) showAuthError('Account already exists. Try signing in.');
-    else showAuthError(msg);
+    const msg = err.message || '';
+    if (msg.includes('Invalid login credentials') || msg.includes('invalid_credentials')) {
+      showAuthError('Wrong email or password. Try again.');
+    } else if (msg.includes('User already registered') || msg.includes('already registered')) {
+      showAuthError('An account with this email already exists. Sign in instead.');
+    } else if (msg.includes('Email not confirmed')) {
+      showAuthError('Please confirm your email first. Check your inbox.');
+    } else if (msg.includes('rate limit') || msg.includes('too many')) {
+      showAuthError('Too many attempts. Please wait a minute and try again.');
+    } else {
+      showAuthError(msg || 'Something went wrong. Please try again.');
+    }
   } finally {
     btn.disabled = false;
     btn.textContent = authMode === 'signup' ? 'Create account' : 'Sign in';
   }
 }
 
-// ── Google OAuth ──────────────────────────────────────────────────
+// ── Google OAuth ─────────────────────────────────────────────────
 async function signInWithGoogle() {
+  const redirectTo = window.location.origin + window.location.pathname;
   const { error } = await supa.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.href }
+    options: { redirectTo }
   });
-  if (error) showAuthError(error.message);
+  if (error) showAuthError('Google sign-in failed: ' + error.message);
 }
 
-// ── Password reset ────────────────────────────────────────────────
+// ── Password reset ───────────────────────────────────────────────
 async function resetPassword() {
   const email = document.getElementById('auth-email').value.trim();
-  if (!email) { showAuthError('Enter your email first, then click Forgot password.'); return; }
-  const { error } = await supa.auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.href
-  });
-  if (error) showAuthError(error.message);
-  else {
-    document.getElementById('auth-modal').style.display = 'none';
-    showToast('📧 Password reset email sent!');
-  }
+  if (!email) { showAuthError('Enter your email address first, then click Forgot password.'); return; }
+  const redirectTo = window.location.origin + window.location.pathname;
+  const { error } = await supa.auth.resetPasswordForEmail(email, { redirectTo });
+  if (error) { showAuthError(error.message); return; }
+  document.getElementById('auth-modal').style.display = 'none';
+  showToast('📧 Password reset email sent! Check your inbox.');
 }
 
-// ── Sign out ──────────────────────────────────────────────────────
+// ── Sign out ─────────────────────────────────────────────────────
 async function signOut() {
-  // Close menu first, then sign out
   const menu = document.getElementById('user-menu');
   if (menu) menu.style.display = 'none';
-  try {
-    const { error } = await supa.auth.signOut();
-    if (error) throw error;
-    // Manually trigger sign out UI since onAuthStateChange
-    // can be slow on some connections
-    handleSignOut();
-    showToast('Signed out successfully');
-  } catch (err) {
-    console.error('Sign out error:', err);
-    // Force UI reset even if supabase call fails
-    handleSignOut();
-    showToast('Signed out');
-  }
+  // Reset UI immediately — don't wait for network
+  handleSignOut();
+  // Then actually sign out from Supabase
+  try { await supa.auth.signOut(); } catch(e) { /* already signed out locally */ }
 }
 
-// ── User menu toggle ─────────────────────────────────────────────
-function toggleUserMenu(forceClose) {
+// ── User menu ────────────────────────────────────────────────────
+function toggleUserMenu() {
   const menu = document.getElementById('user-menu');
   if (!menu) return;
-  if (forceClose === false || forceClose === true) {
-    menu.style.display = forceClose ? 'none' : 'block';
-    return;
-  }
   menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
-// Close menu when clicking outside — use capture to avoid conflicts
 document.addEventListener('click', e => {
-  const menu = document.getElementById('user-menu');
+  const menu   = document.getElementById('user-menu');
   const avatar = document.getElementById('auth-avatar');
   if (!menu || menu.style.display !== 'block') return;
-  if (!menu.contains(e.target) && e.target !== avatar) {
+  if (!menu.contains(e.target) && !avatar.contains(e.target)) {
     menu.style.display = 'none';
   }
-}, true);
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('auth-modal').style.display = 'none';
+    const menu = document.getElementById('user-menu');
+    if (menu) menu.style.display = 'none';
+  }
+});
 
 // ── Toast ────────────────────────────────────────────────────────
 function showToast(msg) {
