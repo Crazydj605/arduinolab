@@ -1791,6 +1791,7 @@ const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
 
 let currentUser = null;
 let currentProfile = null;
+let _suppressWelcomeToast = false;
 
 // ── Boot: check session on page load ─────────────────────────────
 let _sessionHandled = false;
@@ -1843,9 +1844,10 @@ async function handleSession(session, showWelcome = false) {
 
   if (currentProfile?.is_pro) {
     unlockAllLessons(showWelcome);
-  } else if (showWelcome) {
+  } else if (showWelcome && !_suppressWelcomeToast) {
     showToast('✓ Signed in successfully');
   }
+  _suppressWelcomeToast = false;
 }
 
 function handleSignOut() {
@@ -1947,6 +1949,7 @@ async function submitAuth() {
   const btn      = document.getElementById('auth-submit-btn');
 
   if (!email)          { showAuthError('Please enter your email address.'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthError('Please enter a valid email address.'); return; }
   if (!password)       { showAuthError('Please enter your password.'); return; }
   if (password.length < 6) { showAuthError('Password must be at least 6 characters.'); return; }
 
@@ -1956,15 +1959,33 @@ async function submitAuth() {
 
   try {
     if (authMode === 'signup') {
+      _suppressWelcomeToast = true;
       const { data, error } = await supa.auth.signUp({ email, password });
-      if (error) throw error;
-      // Automatically sign in right after account creation
-      const { error: signInError } = await supa.auth.signInWithPassword({ email, password });
-      document.getElementById('auth-modal').style.display = 'none';
-      if (!signInError) {
+      if (error) { _suppressWelcomeToast = false; throw error; }
+
+      // Detect duplicate email when Supabase email confirmation is enabled
+      // (Supabase silently returns empty identities instead of an error in this case)
+      if (data.user?.identities?.length === 0) {
+        _suppressWelcomeToast = false;
+        showAuthError('An account with this email already exists. Switching to Sign in…');
+        setTimeout(() => switchTab('signin'), 2000);
+        return;
+      }
+
+      if (data.session) {
+        // Already signed in from signUp (email confirmation disabled)
+        document.getElementById('auth-modal').style.display = 'none';
         showToast('✓ Account created! Welcome to ArduinoLab.');
       } else {
-        showToast('📧 Check your email to confirm your account!');
+        // Email confirmation may or may not be required — try signing in
+        const { error: signInError } = await supa.auth.signInWithPassword({ email, password });
+        _suppressWelcomeToast = false;
+        document.getElementById('auth-modal').style.display = 'none';
+        if (!signInError) {
+          showToast('✓ Account created! Welcome to ArduinoLab.');
+        } else {
+          showToast('📧 Check your email to confirm your account!');
+        }
       }
     } else {
       const { data, error } = await supa.auth.signInWithPassword({ email, password });
@@ -1977,7 +1998,9 @@ async function submitAuth() {
     if (msg.includes('Invalid login credentials') || msg.includes('invalid_credentials')) {
       showAuthError('Wrong email or password. No account yet? Click Create account above.');
     } else if (msg.includes('User already registered') || msg.includes('already registered')) {
-      showAuthError('An account with this email already exists. Sign in instead.');
+      _suppressWelcomeToast = false;
+      showAuthError('An account with this email already exists. Switching to Sign in…');
+      setTimeout(() => switchTab('signin'), 2000);
     } else if (msg.includes('Email not confirmed')) {
       showAuthError('Please confirm your email first. Check your inbox.');
     } else if (msg.includes('rate limit') || msg.includes('too many')) {
