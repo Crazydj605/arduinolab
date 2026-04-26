@@ -1987,27 +1987,44 @@ async function resetPassword() {
 
 // ── Sign out ──────────────────────────────────────────────────────
 async function signOut() {
-  await supa.auth.signOut();
-  toggleUserMenu(false);
-  showToast('Signed out');
+  // Close menu first, then sign out
+  const menu = document.getElementById('user-menu');
+  if (menu) menu.style.display = 'none';
+  try {
+    const { error } = await supa.auth.signOut();
+    if (error) throw error;
+    // Manually trigger sign out UI since onAuthStateChange
+    // can be slow on some connections
+    handleSignOut();
+    showToast('Signed out successfully');
+  } catch (err) {
+    console.error('Sign out error:', err);
+    // Force UI reset even if supabase call fails
+    handleSignOut();
+    showToast('Signed out');
+  }
 }
 
 // ── User menu toggle ─────────────────────────────────────────────
 function toggleUserMenu(forceClose) {
   const menu = document.getElementById('user-menu');
-  if (forceClose || menu.style.display === 'block') {
-    menu.style.display = 'none';
-  } else {
-    menu.style.display = 'block';
+  if (!menu) return;
+  if (forceClose === false || forceClose === true) {
+    menu.style.display = forceClose ? 'none' : 'block';
+    return;
   }
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
+
+// Close menu when clicking outside — use capture to avoid conflicts
 document.addEventListener('click', e => {
   const menu = document.getElementById('user-menu');
   const avatar = document.getElementById('auth-avatar');
-  if (menu && !menu.contains(e.target) && e.target !== avatar) {
+  if (!menu || menu.style.display !== 'block') return;
+  if (!menu.contains(e.target) && e.target !== avatar) {
     menu.style.display = 'none';
   }
-});
+}, true);
 
 // ── Toast ────────────────────────────────────────────────────────
 function showToast(msg) {
