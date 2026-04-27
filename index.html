@@ -3935,76 +3935,70 @@ const lessons = [
   {
     id: 'blink-led', tags: ['beginner','led'],
     title: 'Blink an LED',
-    desc: 'Your first circuit. Control a single LED with pin 13.',
+    desc: 'Your very first circuit. Make a real LED turn on and off using an Arduino.',
     time: '8 min', diff: 'beginner', locked: false,
-    heroPhoto: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',
+    color: '#C62E2E', icon: '💡',
     parts: [
-      { name: 'Arduino Uno R3', qty: 1, photo: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=200&q=80' },
-      { name: 'Red LED', qty: 1, photo: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=200&q=80' },
-      { name: '220Ω Resistor', qty: 1, photo: 'https://images.unsplash.com/photo-1563770660941-20978e870e26?w=200&q=80' },
-      { name: 'Breadboard', qty: 1, photo: 'https://images.unsplash.com/photo-1580137189272-c9379f8864fd?w=200&q=80' },
-      { name: 'Jumper Wires', qty: 2, photo: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=200&q=80' },
+      { name: 'Arduino Uno R3', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg' },
+      { name: 'Red LED', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/f/f2/LG_Red_LED.jpg' },
+      { name: '220Ω Resistor', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg' },
+      { name: 'Half-size Breadboard', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg' },
+      { name: 'Male-to-Male Jumper Wires', qty: 2, photo: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg' },
     ],
     wiring: [
-      { num: 1, title: 'Insert the LED', detail: 'Push the LED into the breadboard. Long leg (anode) goes in hole <strong>14e</strong>, short leg (cathode) in hole <strong>15e</strong>. The flat edge on the body marks the cathode.' },
-      { num: 2, title: 'Add the 220Ω resistor', detail: 'Insert the resistor horizontally: one lead in hole <strong>15a</strong>, the other in hole <strong>20a</strong>. Orientation doesn\'t matter for resistors.' },
-      { num: 3, title: 'Red wire — Pin 13 → 14a', detail: 'Connect a red jumper wire from Arduino <strong>Pin 13</strong> to breadboard hole <strong>14a</strong>. This is the signal wire.' },
-      { num: 4, title: 'Black wire — GND → 20c', detail: 'Connect a black jumper wire from Arduino <strong>GND</strong> to breadboard hole <strong>20c</strong>. This completes the circuit.' },
-      { num: 5, title: 'Upload the sketch', detail: 'Open the IDE → <strong>File → Examples → Basics → Blink</strong>. Upload it. The LED should blink once per second.' },
+      { num: 1, title: 'Know your LED legs before you plug anything in', detail: 'Hold the LED up to the light. It has two metal legs coming out the bottom. The <strong>longer leg is positive (+) — called the anode</strong>. The <strong>shorter leg is negative (−) — called the cathode</strong>. The flat edge on the plastic body also marks the cathode. If you put the LED in backwards it simply won\'t light up — it won\'t break anything.' },
+      { num: 2, title: 'Insert the LED into the breadboard', detail: 'Push the LED into the breadboard so the <strong>long leg (anode) goes into hole 14e</strong> and the <strong>short leg (cathode) goes into hole 15e</strong>. The breadboard has rows labeled with letters (a–j) and columns labeled with numbers. Row e is the 5th hole from the left edge of each group.' },
+      { num: 3, title: 'Add the 220Ω resistor', detail: 'The resistor protects the LED from too much current — without it the LED would burn out instantly. <strong>Insert one leg of the resistor into hole 15a</strong> (same column as the LED cathode) and the <strong>other leg into hole 20a</strong>. Resistors have no polarity — either leg can go in either hole.' },
+      { num: 4, title: 'Red wire — Arduino Pin 13 to hole 14a (male-to-male)', detail: 'Take a <strong>male-to-male jumper wire</strong> (both ends have metal pins, no socket). Plug one end into Arduino <strong>Pin 13</strong> (look for the label "13" printed on the board near the digital pins). Plug the other end into breadboard hole <strong>14a</strong>. This wire sends the on/off signal from the Arduino to the LED.' },
+      { num: 5, title: 'Black wire — Arduino GND to hole 20c (male-to-male)', detail: 'Take another <strong>male-to-male jumper wire</strong>. Plug one end into any Arduino <strong>GND</strong> pin (there are three on the Uno — any one works). Plug the other end into breadboard hole <strong>20c</strong>. This completes the circuit — electricity can now flow from pin 13, through the LED, through the resistor, and back to GND.' },
+      { num: 6, title: 'Upload the sketch', detail: 'Copy the code shown below in the Sketch section. In the Arduino IDE, paste it in, then click the <strong>Upload button (the right-pointing arrow →)</strong> in the toolbar. Wait for "Done uploading" at the bottom. Your LED should now blink on for 1 second, then off for 1 second, repeating forever.' },
     ],
-    code: `// Blink an LED\nvoid setup() {\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(13, HIGH);\n  delay(1000);\n  digitalWrite(13, LOW);\n  delay(1000);\n}`,
-    color: '#C62E2E',
-    icon: '💡',
+    code: `// Blink an LED on Pin 13\n// Pin 13 also controls the built-in LED on the Arduino board\n\nvoid setup() {\n  // Tell the Arduino that Pin 13 will be used as an OUTPUT\n  // (sending voltage out, not reading voltage in)\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(13, HIGH);  // Turn LED ON  (sends 5V to pin 13)\n  delay(1000);             // Wait 1000 milliseconds = 1 second\n  digitalWrite(13, LOW);   // Turn LED OFF (sends 0V to pin 13)\n  delay(1000);             // Wait 1 second again\n  // loop() repeats forever, so this keeps blinking\n}`,
   },
   {
     id: 'button-input', tags: ['beginner'],
     title: 'Button Input',
-    desc: 'Read a push button and light up an LED when pressed.',
+    desc: 'Wire a push button so pressing it turns on the built-in LED.',
     time: '12 min', diff: 'beginner', locked: false,
-    heroPhoto: 'https://images.unsplash.com/photo-1601132359864-66e4b07f2b2c?w=800&q=80',
+    color: '#3D4A42', icon: '🔘',
     parts: [
-      { name: 'Arduino Uno R3', qty: 1 },
-      { name: 'Push Button (tactile)', qty: 1 },
-      { name: '10kΩ Resistor', qty: 1 },
-      { name: 'LED (any color)', qty: 1 },
-      { name: 'Breadboard', qty: 1 },
-      { name: 'Jumper Wires', qty: 5 },
+      { name: 'Arduino Uno R3', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg' },
+      { name: '6×6mm Tactile Push Button', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/b/b8/Tact_switches.jpg' },
+      { name: '10kΩ Resistor', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg' },
+      { name: 'Half-size Breadboard', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg' },
+      { name: 'Male-to-Male Jumper Wires', qty: 3, photo: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg' },
     ],
     wiring: [
-      { num: 1, title: 'Insert the push button', detail: 'Push the button into the breadboard so it straddles the center gap. Pins land in columns <strong>16–17</strong> and <strong>19–20</strong>, rows d–g.' },
-      { num: 2, title: 'Add the 10kΩ pull-down resistor', detail: 'Insert resistor from hole <strong>17a</strong> to hole <strong>22a</strong>. This prevents the pin from floating when the button is unpressed.' },
-      { num: 3, title: 'Red wire — 5V → 22c', detail: 'Connect a red jumper from Arduino <strong>5V</strong> to hole <strong>22c</strong>. This powers the button.' },
-      { num: 4, title: 'Yellow wire — Pin 2 → 17b', detail: 'Connect a yellow jumper from Arduino <strong>Pin 2</strong> to hole <strong>17b</strong>. This reads the button state.' },
-      { num: 5, title: 'Black wire — GND → 19b', detail: 'Connect a black jumper from Arduino <strong>GND</strong> to hole <strong>19b</strong>. Press the button — Pin 2 reads HIGH.' },
+      { num: 1, title: 'Understand your push button before inserting it', detail: 'Your tactile push button is a small square component with <strong>4 metal legs</strong> — two on each side. The two legs on the same side are <strong>already connected to each other inside the button</strong>. The two legs on opposite sides are <strong>only connected when you press the button</strong>. This is how it switches a circuit on and off.' },
+      { num: 2, title: 'Insert the push button straddling the center gap', detail: 'The breadboard has a gap running down the middle that splits it into two halves. <strong>Push the button so it sits across this gap</strong> — two legs on the left side, two legs on the right side. A correct placement: left legs in holes <strong>e14 and e15</strong>, right legs in holes <strong>f14 and f15</strong>. You\'ll feel it click into place. If it won\'t sit flat, rotate it 90° and try again.' },
+      { num: 3, title: 'Red wire — Arduino 5V to hole e14 (male-to-male)', detail: 'Take a <strong>male-to-male jumper wire</strong>. Plug one end into the Arduino\'s <strong>5V pin</strong> (labeled "5V" on the board). Plug the other end into hole <strong>e14</strong> — one of the left-side button legs. When the button is pressed, this 5V travels across to the right side.' },
+      { num: 4, title: 'Yellow wire — Arduino Pin 2 to hole f14 (male-to-male)', detail: 'Take a <strong>male-to-male jumper wire</strong>. Plug one end into Arduino <strong>Pin 2</strong> (look for "2" in the digital pin row). Plug the other end into hole <strong>f14</strong> — one of the right-side button legs. When the button is pressed, Pin 2 receives 5V and reads HIGH. When released, it reads LOW (because of the resistor in the next step).' },
+      { num: 5, title: 'Add the 10kΩ pull-down resistor — hole f15 to GND rail', detail: 'Without this resistor, Pin 2 would give random readings when the button is not pressed (a "floating" pin). Insert the <strong>10kΩ resistor</strong> with one leg in hole <strong>f15</strong> (the other right-side button leg) and the other leg in the <strong>GND rail</strong> — the row marked with a "−" or "GND" along the long edge of the breadboard. This holds Pin 2 firmly at 0V when the button is not pressed.' },
+      { num: 6, title: 'Black wire — Arduino GND to GND rail (male-to-male)', detail: 'Take a <strong>male-to-male jumper wire</strong>. Plug one end into any Arduino <strong>GND</strong> pin. Plug the other end into the same <strong>GND rail</strong> where the resistor ends. This connects the breadboard\'s GND rail to the Arduino\'s ground, completing the circuit. Now upload the sketch — pressing the button should light up the Arduino\'s built-in LED on Pin 13.' },
     ],
-    code: `void setup() {\n  pinMode(2, INPUT);\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  int state = digitalRead(2);\n  digitalWrite(13, state);\n}`,
-    color: '#3D4A42',
-    icon: '🔘',
+    code: `// Button Input — press the button to light up the built-in LED\n// Pin 2 = button input, Pin 13 = built-in LED output\n\nvoid setup() {\n  pinMode(2, INPUT);   // Pin 2 reads the button (INPUT = reading voltage)\n  pinMode(13, OUTPUT); // Pin 13 controls the LED (OUTPUT = sending voltage)\n}\n\nvoid loop() {\n  // digitalRead(2) returns HIGH (1) when button is pressed\n  // and LOW (0) when it is not pressed\n  int buttonState = digitalRead(2);\n\n  // Copy the button state directly to the LED pin\n  // Button pressed = LED on. Button released = LED off.\n  digitalWrite(13, buttonState);\n}`,
   },
   {
     id: 'potentiometer', tags: ['beginner'],
     title: 'Potentiometer Dimmer',
-    desc: 'Use analog input to smoothly dim an LED.',
+    desc: 'Use a dial (potentiometer) to smoothly control a value — and see it in real time.',
     time: '15 min', diff: 'beginner', locked: false,
-    heroPhoto: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=800&q=80',
+    color: '#B8935A', icon: '🎛️',
     parts: [
-      { name: 'Arduino Uno R3', qty: 1 },
-      { name: '10kΩ Potentiometer', qty: 1 },
-      { name: 'LED (any color)', qty: 1 },
-      { name: '220Ω Resistor', qty: 1 },
-      { name: 'Breadboard', qty: 1 },
-      { name: 'Jumper Wires', qty: 3 },
+      { name: 'Arduino Uno R3', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg' },
+      { name: '10kΩ Potentiometer', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/b/b5/Potentiometer.jpg' },
+      { name: 'Half-size Breadboard', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg' },
+      { name: 'Male-to-Male Jumper Wires', qty: 3, photo: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg' },
     ],
     wiring: [
-      { num: 1, title: 'Insert the potentiometer', detail: 'Push the pot into the breadboard. Three pins land in holes <strong>14e</strong>, <strong>15e</strong>, <strong>16e</strong>. Left pin = VCC, middle pin = wiper (output), right pin = GND.' },
-      { num: 2, title: 'Red wire — 5V → 14c', detail: 'Connect Arduino <strong>5V</strong> to hole <strong>14c</strong>. This powers the left pin of the pot.' },
-      { num: 3, title: 'Yellow wire — A0 → 15c', detail: 'Connect Arduino <strong>A0</strong> to hole <strong>15c</strong>. This reads the wiper position (0–1023 as you turn the knob).' },
-      { num: 4, title: 'Black wire — GND → 16c', detail: 'Connect Arduino <strong>GND</strong> to hole <strong>16c</strong>. This grounds the right pin.' },
-      { num: 5, title: 'Upload and turn the knob', detail: 'Upload the sketch. Open Serial Monitor at 9600 baud — watch the value change from 0 to 1023 as you turn.' },
+      { num: 1, title: 'Understand your potentiometer', detail: 'A potentiometer (or "pot") is a dial that acts like an adjustable resistor. It has <strong>3 pins</strong> coming out the bottom. The <strong>left pin connects to power (5V)</strong>, the <strong>right pin connects to ground (GND)</strong>, and the <strong>middle pin is the signal</strong> — its voltage changes smoothly as you turn the knob. Turn it all the way one way and the signal is 0V; turn it the other way and the signal is 5V.' },
+      { num: 2, title: 'Insert the potentiometer into the breadboard', detail: 'Push the potentiometer\'s 3 pins into the breadboard. Place it so all 3 pins are in row <strong>e</strong>: left pin in hole <strong>14e</strong>, middle pin in hole <strong>15e</strong>, right pin in hole <strong>16e</strong>. The body of the pot will hang over the edge of the breadboard — that is normal.' },
+      { num: 3, title: 'Red wire — Arduino 5V to hole 14c (male-to-male)', detail: 'Take a <strong>male-to-male jumper wire</strong>. Plug one end into the Arduino\'s <strong>5V pin</strong>. Plug the other end into hole <strong>14c</strong>. This connects to the left pin of the pot (power). Holes in the same numbered row (14a, 14b, 14c, 14d, 14e) are all connected on the breadboard, so 14c reaches the pot at 14e.' },
+      { num: 4, title: 'Yellow wire — Arduino A0 to hole 15c (male-to-male)', detail: 'Take a <strong>male-to-male jumper wire</strong>. Plug one end into Arduino pin <strong>A0</strong> — this is an analog input pin, found in the row labeled "ANALOG IN" on the board. Plug the other end into hole <strong>15c</strong>. This connects to the middle (wiper) pin. As you turn the knob, A0 will read a value from 0 to 1023.' },
+      { num: 5, title: 'Black wire — Arduino GND to hole 16c (male-to-male)', detail: 'Take a <strong>male-to-male jumper wire</strong>. Plug one end into any Arduino <strong>GND</strong> pin. Plug the other end into hole <strong>16c</strong>. This connects to the right pin of the pot (ground). Now the pot has power, ground, and its signal going to A0.' },
+      { num: 6, title: 'Upload the sketch and read the values', detail: 'Copy the code in the Sketch section below and click the <strong>Upload button (→)</strong> in the Arduino IDE. Once uploaded, click <strong>Tools → Serial Monitor</strong> in the IDE to open a window that shows numbers. Turn the knob slowly — you should see the number change from 0 (one way) to 1023 (the other way). That number is the voltage on A0 mapped to a 0–1023 scale.' },
     ],
-    code: `void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int val = analogRead(A0);\n  Serial.println(val);\n  delay(100);\n}`,
-    color: '#B8935A',
-    icon: '🎛️',
+    code: `// Potentiometer — read the knob and print the value\n// A0 = analog input pin connected to the middle wiper pin\n\nvoid setup() {\n  // Start serial communication at 9600 baud\n  // This lets us send messages from Arduino to the computer\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  // analogRead() reads the voltage on A0\n  // It returns a number: 0 = 0V (knob fully left)\n  //                      1023 = 5V (knob fully right)\n  int val = analogRead(A0);\n\n  // Print the value to the Serial Monitor\n  Serial.println(val);\n\n  // Wait 100ms so the output doesn\'t scroll too fast\n  delay(100);\n}`,
   },
   {
     id: 'sg90-servo', tags: ['beginner','servo'],
@@ -4875,7 +4869,7 @@ function openLesson(idx) {
   const partsHtml = l.parts.map(p => `
     <label class="part-check-row">
       <input type="checkbox" class="part-check-cb">
-      <span class="part-check-icon">${getPartIcon(p.name)}</span>
+      <span class="part-check-icon" style="overflow:hidden;padding:0;">${p.photo ? `<img src="${p.photo}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;" onerror="this.parentElement.style.padding='';this.outerHTML='${getPartIcon(p.name)}'">` : getPartIcon(p.name)}</span>
       <span class="part-check-box"></span>
       <span class="part-check-info">
         <span class="part-check-name">${p.name}</span>
@@ -5598,28 +5592,74 @@ function openBot() {
   document.getElementById('botPanel').classList.add('open');
 }
 
-const botReplies = [
-  "Good question. Let me walk you through it step by step.",
-  "Classic issue — 9 times out of 10 it's a ground problem. Is your Arduino GND connected to the servo's GND rail?",
-  "That resistor value matters. Too low and you'll fry the LED, too high and it stays dim. For a red LED on 5V, 220Ω is the sweet spot.",
-  "Check if the pin is actually set to OUTPUT in your setup(). That trips up everyone at least once.",
-  "Try a smaller delay — sometimes the loop is running too fast for the sensor to settle. Start with delay(50) and work down."
-];
-let botIdx = 0;
-function sendBot() {
+// ── Arc AI Tutor (Claude API) ─────────────────────────────────
+// Add your Anthropic API key below. Get one at console.anthropic.com
+const ARC_API_KEY = '';
+
+const arcHistory = [];
+const ARC_SYSTEM = `You are Arc, a friendly AI tutor for ArduinoLab — a platform teaching Arduino electronics to complete beginners.
+
+Your rules:
+- Always assume the user knows NOTHING about electronics or coding. Explain every term.
+- Keep replies SHORT (2–4 sentences) unless they ask for more detail.
+- Be warm, encouraging, and patient — never make them feel dumb.
+- When someone has a wiring problem, ask ONE clarifying question at a time.
+- Never tell someone to use Arduino IDE menus (like File → Examples). Just say "upload the sketch in the lesson."
+- When you mention wires, always say whether they're male-to-male, male-to-female, etc.
+- Give accurate, factual Arduino advice. Do not guess.
+- If a question is totally off topic, gently redirect them back to Arduino/electronics.`;
+
+async function sendBot() {
   const input = document.getElementById('botInput');
   const val = input.value.trim();
   if (!val) return;
   const box = document.getElementById('botMessages');
+
   box.innerHTML += `<div class="msg msg-user">${escapeHtml(val)}</div>`;
   input.value = '';
   box.scrollTop = box.scrollHeight;
-  setTimeout(() => {
-    box.innerHTML += `<div class="msg msg-bot">${botReplies[botIdx % botReplies.length]}</div>`;
-    botIdx++;
+
+  if (!ARC_API_KEY) {
+    box.innerHTML += `<div class="msg msg-bot">Arc AI isn't set up yet — the site owner needs to add an API key. In the meantime, check the wiring steps in the lesson or ask in the community!</div>`;
     box.scrollTop = box.scrollHeight;
-  }, 600);
+    return;
+  }
+
+  // Loading indicator
+  const loadId = 'arc-loading-' + Date.now();
+  box.innerHTML += `<div class="msg msg-bot" id="${loadId}" style="opacity:0.5">Arc is thinking…</div>`;
+  box.scrollTop = box.scrollHeight;
+
+  arcHistory.push({ role: 'user', content: val });
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ARC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 512,
+        system: ARC_SYSTEM,
+        messages: arcHistory,
+      }),
+    });
+    const json = await res.json();
+    const reply = json.content?.[0]?.text || 'Sorry, I couldn\'t get a response. Try again!';
+    arcHistory.push({ role: 'assistant', content: reply });
+    const loadEl = document.getElementById(loadId);
+    if (loadEl) loadEl.outerHTML = `<div class="msg msg-bot">${escapeHtml(reply).replace(/\n/g,'<br>')}</div>`;
+  } catch(e) {
+    const loadEl = document.getElementById(loadId);
+    if (loadEl) loadEl.outerHTML = `<div class="msg msg-bot">Something went wrong connecting to Arc. Check your internet and try again.</div>`;
+  }
+  box.scrollTop = box.scrollHeight;
 }
+
 document.getElementById('botInput').addEventListener('keypress', e => {
   if (e.key === 'Enter') sendBot();
 });
