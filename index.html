@@ -4007,17 +4007,17 @@ const lessons = [
     time: '18 min', diff: 'beginner', locked: true,
     heroPhoto: 'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?w=800&q=80',
     parts: [
-      { name: 'Arduino Uno R3', qty: 1 },
-      { name: 'SG90 Servo Motor', qty: 1 },
-      { name: 'Breadboard', qty: 1 },
-      { name: 'Jumper Wires', qty: 3 },
+      { name: 'Arduino Uno R3', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg' },
+      { name: 'SG90 Servo Motor', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/6/6e/SG90_servo.jpg' },
+      { name: 'Breadboard', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg' },
+      { name: 'Male-to-Male Jumper Wires', qty: 3, photo: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg' },
     ],
     wiring: [
-      { num: 1, title: 'Identify servo wires', detail: 'The SG90 has 3 wires: <strong>Orange</strong> = signal, <strong>Red</strong> = power (5V), <strong>Brown</strong> = ground. These connect directly to the Arduino — no breadboard needed.' },
-      { num: 2, title: 'Orange wire — signal → Pin 9', detail: 'Plug the orange wire (signal) into Arduino <strong>Pin 9</strong>. Pin 9 is PWM-capable (marked with ~).' },
-      { num: 3, title: 'Red wire — power → 5V', detail: 'Plug the red wire into Arduino <strong>5V</strong>.' },
-      { num: 4, title: 'Brown wire — ground → GND', detail: 'Plug the brown wire into Arduino <strong>GND</strong>.' },
-      { num: 5, title: 'Upload sweep sketch', detail: 'Upload the sketch. The servo arm sweeps from 0° → 180° → 0° in a loop.' },
+      { num: 1, title: 'Identify the three servo wires', detail: 'The SG90 servo has three wires coming out of it: <strong>Orange</strong> (signal), <strong>Red</strong> (power), and <strong>Brown</strong> (ground). These colors tell you exactly where each wire goes — the signal wire carries the position command, the red wire feeds the motor power, and brown is the return path for electricity.' },
+      { num: 2, title: 'Orange wire — signal → Pin 9 (male-to-male)', detail: 'Plug the <strong>orange</strong> signal wire into Arduino <strong>Pin 9</strong>. Use a <strong>male-to-male jumper wire</strong> if the servo connector does not reach. Pin 9 is a PWM pin (marked with ~ on the board), which lets the Arduino send precise position pulses to the servo.' },
+      { num: 3, title: 'Red wire — power → 5V (male-to-male)', detail: 'Plug the <strong>red</strong> wire into the Arduino <strong>5V</strong> pin using a <strong>male-to-male jumper wire</strong>. This feeds 5 volts to the servo motor so it has enough power to move its arm.' },
+      { num: 4, title: 'Brown wire — ground → GND (male-to-male)', detail: 'Plug the <strong>brown</strong> wire into any Arduino <strong>GND</strong> pin using a <strong>male-to-male jumper wire</strong>. This completes the circuit by giving electricity a path back to ground — without it the servo will not work at all.' },
+      { num: 5, title: 'Upload the sweep sketch', detail: 'Upload the sketch below using the <strong>Upload button (→)</strong> in the Arduino IDE. The servo arm will sweep slowly from <strong>0°</strong> to <strong>180°</strong> and back, repeating forever — you will see it physically rotate back and forth.' },
     ],
     code: `#include <Servo.h>\nServo myServo;\n\nvoid setup() {\n  myServo.attach(9);\n}\n\nvoid loop() {\n  for (int i = 0; i <= 180; i++) {\n    myServo.write(i);\n    delay(15);\n  }\n  for (int i = 180; i >= 0; i--) {\n    myServo.write(i);\n    delay(15);\n  }\n}`,
     color: '#2D5D3F',
@@ -4030,17 +4030,17 @@ const lessons = [
     time: '22 min', diff: 'intermediate', locked: true,
     heroPhoto: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',
     parts: [
-      { name: 'Arduino Uno R3', qty: 1 },
-      { name: 'HC-SR04 Sensor', qty: 1 },
-      { name: 'Breadboard', qty: 1 },
-      { name: 'Jumper Wires', qty: 4 },
+      { name: 'Arduino Uno R3', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg' },
+      { name: 'HC-SR04 Sensor', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/HCSR04.jpg/320px-HCSR04.jpg' },
+      { name: 'Breadboard', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg' },
+      { name: 'Male-to-Male Jumper Wires', qty: 4, photo: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg' },
     ],
     wiring: [
-      { num: 1, title: 'Insert HC-SR04 into breadboard', detail: 'The HC-SR04 has 4 pins: <strong>VCC</strong>, <strong>Trig</strong>, <strong>Echo</strong>, <strong>GND</strong> — from left to right. Insert into holes <strong>13e–16e</strong>.' },
-      { num: 2, title: 'Red wire — 5V → 13c (VCC)', detail: 'Arduino <strong>5V</strong> → hole <strong>13c</strong>. Powers the sensor.' },
-      { num: 3, title: 'Yellow wire — Pin 2 → 14c (Trig)', detail: 'Arduino <strong>Pin 2</strong> → hole <strong>14c</strong>. You pulse this pin to send the ultrasonic burst.' },
-      { num: 4, title: 'Orange wire — Pin 3 → 15c (Echo)', detail: 'Arduino <strong>Pin 3</strong> → hole <strong>15c</strong>. This pin stays HIGH while the echo is returning.' },
-      { num: 5, title: 'Black wire — GND → 16c', detail: 'Arduino <strong>GND</strong> → hole <strong>16c</strong>. Open Serial Monitor at 9600 baud — hold your hand in front of the sensor and watch the distance update.' },
+      { num: 1, title: 'Insert HC-SR04 into the breadboard', detail: 'The HC-SR04 has 4 pins labeled <strong>VCC</strong>, <strong>Trig</strong>, <strong>Echo</strong>, and <strong>GND</strong> — from left to right on the module. Insert the 4 pins into holes <strong>13e, 14e, 15e, and 16e</strong> so they sit firmly in the board — the two round "eyes" of the sensor should face outward toward you.' },
+      { num: 2, title: 'Red wire — 5V → hole 13c (VCC) — male-to-male', detail: 'Connect the Arduino <strong>5V</strong> pin to hole <strong>13c</strong> using a <strong>male-to-male jumper wire</strong>. This powers the sensor so it can emit and receive ultrasonic sound pulses.' },
+      { num: 3, title: 'Yellow wire — Pin 2 → hole 14c (Trig) — male-to-male', detail: 'Connect Arduino <strong>Pin 2</strong> to hole <strong>14c</strong> using a <strong>male-to-male jumper wire</strong>. The Trig (trigger) pin is like a button — when the Arduino sends a short HIGH pulse here, the sensor fires a burst of ultrasonic sound outward.' },
+      { num: 4, title: 'Orange wire — Pin 3 → hole 15c (Echo) — male-to-male', detail: 'Connect Arduino <strong>Pin 3</strong> to hole <strong>15c</strong> using a <strong>male-to-male jumper wire</strong>. The Echo pin goes HIGH when the sound pulse leaves and goes LOW when the echo returns — the Arduino measures how long it stayed HIGH and converts that time into distance.' },
+      { num: 5, title: 'Black wire — GND → hole 16c — male-to-male', detail: 'Connect Arduino <strong>GND</strong> to hole <strong>16c</strong> using a <strong>male-to-male jumper wire</strong>. This grounds the sensor and completes the circuit. After uploading the sketch, open <strong>Tools → Serial Monitor</strong> at 9600 baud and hold your hand in front — watch the distance in centimeters update live.' },
     ],
     code: `#define TRIG 2\n#define ECHO 3\n\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(TRIG, OUTPUT);\n  pinMode(ECHO, INPUT);\n}\n\nvoid loop() {\n  digitalWrite(TRIG, LOW); delayMicroseconds(2);\n  digitalWrite(TRIG, HIGH); delayMicroseconds(10);\n  digitalWrite(TRIG, LOW);\n  long dur = pulseIn(ECHO, HIGH);\n  int cm = dur / 58;\n  Serial.print(cm); Serial.println(" cm");\n  delay(200);\n}`,
     color: '#4A7BA7',
@@ -4053,19 +4053,19 @@ const lessons = [
     time: '20 min', diff: 'intermediate', locked: true,
     heroPhoto: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80',
     parts: [
-      { name: 'Arduino Uno R3', qty: 1 },
-      { name: 'RGB LED (common cathode)', qty: 1 },
-      { name: '220Ω Resistor', qty: 3 },
-      { name: 'Breadboard', qty: 1 },
-      { name: 'Jumper Wires', qty: 4 },
+      { name: 'Arduino Uno R3', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg' },
+      { name: 'RGB LED (common cathode)', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/LED_RGB.jpg/200px-LED_RGB.jpg' },
+      { name: '220Ω Resistor', qty: 3, photo: 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg' },
+      { name: 'Breadboard', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg' },
+      { name: 'Male-to-Male Jumper Wires', qty: 4, photo: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg' },
     ],
     wiring: [
-      { num: 1, title: 'Insert RGB LED', detail: 'RGB LED has 4 legs. From left: <strong>Red</strong> (col 12e), <strong>Cathode/GND</strong> (col 13e — longest leg), <strong>Green</strong> (col 14e), <strong>Blue</strong> (col 15e).' },
-      { num: 2, title: 'Add three 220Ω resistors', detail: 'One per color channel: col <strong>12a→18a</strong>, col <strong>14a→19a</strong>, col <strong>15a→20a</strong>. These limit current to each LED.' },
-      { num: 3, title: 'Red wire — Pin 9 → 18c', detail: 'Arduino <strong>Pin 9</strong> (PWM) → hole <strong>18c</strong>. Controls red brightness.' },
-      { num: 4, title: 'Green wire — Pin 10 → 19c', detail: 'Arduino <strong>Pin 10</strong> (PWM) → hole <strong>19c</strong>. Controls green brightness.' },
-      { num: 5, title: 'Blue wire — Pin 11 → 20c', detail: 'Arduino <strong>Pin 11</strong> (PWM) → hole <strong>20c</strong>. Controls blue brightness.' },
-      { num: 6, title: 'Black wire — GND → 13c (cathode)', detail: 'Arduino <strong>GND</strong> → hole <strong>13c</strong>. Use analogWrite(pin, 0–255) to mix any color.' },
+      { num: 1, title: 'Insert the RGB LED into the breadboard', detail: 'An RGB LED has <strong>4 legs</strong> — it is actually three tiny LEDs (Red, Green, Blue) sharing one common ground leg. From left to right: <strong>Red leg</strong> in hole <strong>12e</strong>, <strong>Cathode (longest leg / GND)</strong> in hole <strong>13e</strong>, <strong>Green leg</strong> in hole <strong>14e</strong>, <strong>Blue leg</strong> in hole <strong>15e</strong>. Make sure the longest leg is in 13e — that is the shared ground.' },
+      { num: 2, title: 'Add three 220Ω resistors — one per color', detail: 'Each color channel needs its own resistor to prevent the LED from burning out. Insert resistors: one from hole <strong>12a to 18a</strong> (red channel), one from hole <strong>14a to 19a</strong> (green channel), one from hole <strong>15a to 20a</strong> (blue channel). Resistors have no polarity so either leg can go in either hole.' },
+      { num: 3, title: 'Red wire — Pin 9 → hole 18c — male-to-male', detail: 'Connect Arduino <strong>Pin 9</strong> to hole <strong>18c</strong> using a <strong>male-to-male jumper wire</strong>. Pin 9 is a PWM pin (marked ~) which lets you set brightness anywhere from 0 (off) to 255 (full brightness) for the red channel.' },
+      { num: 4, title: 'Green wire — Pin 10 → hole 19c — male-to-male', detail: 'Connect Arduino <strong>Pin 10</strong> to hole <strong>19c</strong> using a <strong>male-to-male jumper wire</strong>. This is also a PWM pin, so you can mix any amount of green into your color — 0 is no green, 255 is full green.' },
+      { num: 5, title: 'Blue wire — Pin 11 → hole 20c — male-to-male', detail: 'Connect Arduino <strong>Pin 11</strong> to hole <strong>20c</strong> using a <strong>male-to-male jumper wire</strong>. With all three PWM channels connected you can now make almost any color by mixing red, green, and blue brightness values.' },
+      { num: 6, title: 'Black wire — GND → hole 13c (cathode) — male-to-male', detail: 'Connect Arduino <strong>GND</strong> to hole <strong>13c</strong> using a <strong>male-to-male jumper wire</strong>. This grounds the shared cathode leg of the RGB LED. Without this ground connection, the LED cannot light up at all.' },
     ],
     code: `void setup() {}\n\nvoid loop() {\n  // Red\n  analogWrite(9, 255);\n  analogWrite(10, 0);\n  analogWrite(11, 0);\n  delay(500);\n  // Purple\n  analogWrite(9, 180);\n  analogWrite(10, 0);\n  analogWrite(11, 255);\n  delay(500);\n}`,
     color: '#9B59B6',
@@ -4078,17 +4078,17 @@ const lessons = [
     time: '30 min', diff: 'intermediate', locked: true,
     heroPhoto: 'https://images.unsplash.com/photo-1551808525-51a94da548ce?w=800&q=80',
     parts: [
-      { name: 'Arduino Uno R3', qty: 1 },
-      { name: 'OLED 128×64 (I2C)', qty: 1 },
-      { name: 'Breadboard', qty: 1 },
-      { name: 'Jumper Wires', qty: 4 },
+      { name: 'Arduino Uno R3', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg' },
+      { name: 'OLED 128×64 (I2C)', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/OLED_screen.jpg/200px-OLED_screen.jpg' },
+      { name: 'Breadboard', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg' },
+      { name: 'Male-to-Male Jumper Wires', qty: 4, photo: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg' },
     ],
     wiring: [
-      { num: 1, title: 'Insert OLED into breadboard', detail: 'OLED has 4 pins: <strong>GND</strong>, <strong>VCC</strong>, <strong>SCL</strong>, <strong>SDA</strong> — insert into holes <strong>14e–17e</strong>.' },
-      { num: 2, title: 'Black wire — GND → 14c', detail: 'Arduino <strong>GND</strong> → hole <strong>14c</strong>.' },
-      { num: 3, title: 'Red wire — 5V → 15c', detail: 'Arduino <strong>5V</strong> → hole <strong>15c</strong>.' },
-      { num: 4, title: 'Yellow wire — A5 (SCL) → 16c', detail: 'Arduino <strong>A5</strong> is the I2C clock line → hole <strong>16c</strong>.' },
-      { num: 5, title: 'Blue wire — A4 (SDA) → 17c', detail: 'Arduino <strong>A4</strong> is the I2C data line → hole <strong>17c</strong>. Install the Adafruit_SSD1306 library before uploading.' },
+      { num: 1, title: 'Insert the OLED module into the breadboard', detail: 'The OLED module has <strong>4 pins</strong> — from left to right: <strong>GND</strong>, <strong>VCC</strong>, <strong>SCL</strong>, <strong>SDA</strong>. Insert them into holes <strong>14e, 15e, 16e, and 17e</strong>. The OLED communicates using a protocol called I2C which only needs two wires (SCL and SDA) to send all data, making wiring very simple.' },
+      { num: 2, title: 'Black wire — GND → hole 14c — male-to-male', detail: 'Connect Arduino <strong>GND</strong> to hole <strong>14c</strong> using a <strong>male-to-male jumper wire</strong>. This is the ground connection for the display — without it the screen will not power on.' },
+      { num: 3, title: 'Red wire — 5V → hole 15c — male-to-male', detail: 'Connect Arduino <strong>5V</strong> to hole <strong>15c</strong> using a <strong>male-to-male jumper wire</strong>. This provides power to the OLED panel. The display draws very little current so powering it from the Arduino 5V pin is perfectly safe.' },
+      { num: 4, title: 'Yellow wire — A5 (SCL) → hole 16c — male-to-male', detail: 'Connect Arduino <strong>A5</strong> to hole <strong>16c</strong> using a <strong>male-to-male jumper wire</strong>. A5 is the I2C clock line (SCL) — it sends a timing pulse that tells the OLED when to read each bit of data arriving on the data line.' },
+      { num: 5, title: 'Blue wire — A4 (SDA) → hole 17c — male-to-male', detail: 'Connect Arduino <strong>A4</strong> to hole <strong>17c</strong> using a <strong>male-to-male jumper wire</strong>. A4 is the I2C data line (SDA) — this is where the actual text and graphics data travels from the Arduino to the screen. Before uploading, install the <strong>Adafruit SSD1306</strong> library: in the Arduino IDE go to <strong>Tools → Manage Libraries</strong>, search for <strong>Adafruit SSD1306</strong> and click Install (also install Adafruit GFX if prompted).' },
     ],
     code: `#include <Adafruit_SSD1306.h>\nAdafruit_SSD1306 display(128, 64, &Wire, -1);\n\nvoid setup() {\n  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);\n  display.clearDisplay();\n  display.setTextSize(2);\n  display.setTextColor(WHITE);\n  display.setCursor(0, 0);\n  display.println("Hello!");\n  display.display();\n}\n\nvoid loop() {}`,
     color: '#1C2820',
@@ -4101,21 +4101,21 @@ const lessons = [
     time: '35 min', diff: 'advanced', locked: true,
     heroPhoto: 'https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?w=800&q=80',
     parts: [
-      { name: 'Arduino Uno R3', qty: 1 },
-      { name: 'NEMA17 Stepper Motor', qty: 1 },
-      { name: 'A4988 Driver Module', qty: 1 },
-      { name: '100µF Capacitor', qty: 1 },
-      { name: 'Breadboard', qty: 1 },
-      { name: 'Jumper Wires', qty: 7 },
-      { name: '12V Power Supply', qty: 1 },
+      { name: 'Arduino Uno R3', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg' },
+      { name: 'NEMA17 Stepper Motor', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/NEMA17_Stepper.jpg/200px-NEMA17_Stepper.jpg' },
+      { name: 'A4988 Driver Module', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg' },
+      { name: '100µF Capacitor', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Capacitors_7189597832.jpg/200px-Capacitors_7189597832.jpg' },
+      { name: 'Breadboard', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg' },
+      { name: 'Male-to-Male Jumper Wires', qty: 7, photo: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg' },
+      { name: '12V Power Supply', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Capacitors_7189597832.jpg/200px-Capacitors_7189597832.jpg' },
     ],
     wiring: [
-      { num: 1, title: 'Insert A4988 across the center gap', detail: 'The A4988 module straddles the breadboard\'s center gap. VMOT and GND on one side, STEP/DIR on the other.' },
-      { num: 2, title: 'Connect stepper motor coils', detail: 'NEMA17 has 4 wires in 2 pairs (coil A + coil B). Connect to A4988 terminals: <strong>1A, 1B</strong> (first coil) and <strong>2A, 2B</strong> (second coil).' },
-      { num: 3, title: '12V → VMOT, GND → A4988 GND', detail: 'Motor power goes to <strong>VMOT</strong>. Add the <strong>100µF capacitor</strong> across VMOT and GND to suppress voltage spikes.' },
-      { num: 4, title: 'Yellow — Pin 2 → STEP', detail: 'Arduino <strong>Pin 2</strong> → A4988 <strong>STEP</strong>. Each pulse = one step (200 steps = 1 full rotation).' },
-      { num: 5, title: 'Orange — Pin 3 → DIR', detail: 'Arduino <strong>Pin 3</strong> → A4988 <strong>DIR</strong>. HIGH = clockwise, LOW = counter-clockwise.' },
-      { num: 6, title: 'Arduino 5V → A4988 VDD, Arduino GND → A4988 GND', detail: 'Logic power for the A4988 chip itself (separate from motor power).' },
+      { num: 1, title: 'Insert the A4988 driver across the center gap', detail: 'Place the A4988 module so it straddles the breadboard center gap — pins on the left side and pins on the right side. The A4988 is the "brain" that translates simple STEP/DIR pulses from the Arduino into the precise coil-switching the stepper motor needs to turn.' },
+      { num: 2, title: 'Connect the NEMA17 motor coils to the A4988', detail: 'The NEMA17 has <strong>4 wires</strong> forming two coil pairs — coil A and coil B. Connect coil A wires to the A4988 <strong>1A</strong> and <strong>1B</strong> pins, and coil B wires to <strong>2A</strong> and <strong>2B</strong>. Check your motor datasheet for which wire is which — getting them swapped just reverses the direction or causes vibration.' },
+      { num: 3, title: '12V supply → VMOT and GND, plus 100µF capacitor', detail: 'Connect the 12V power supply positive wire to the A4988 <strong>VMOT</strong> pin and negative wire to A4988 <strong>GND</strong>. Place the <strong>100µF capacitor</strong> across VMOT and GND with the positive leg (longer) toward VMOT — this protects the A4988 from voltage spikes when the motor starts and stops.' },
+      { num: 4, title: 'Yellow wire — Pin 2 → STEP — male-to-male', detail: 'Connect Arduino <strong>Pin 2</strong> to the A4988 <strong>STEP</strong> pin using a <strong>male-to-male jumper wire</strong>. Every time this pin pulses HIGH then LOW, the motor moves exactly one step — a NEMA17 takes 200 steps to complete one full 360° rotation.' },
+      { num: 5, title: 'Orange wire — Pin 3 → DIR — male-to-male', detail: 'Connect Arduino <strong>Pin 3</strong> to the A4988 <strong>DIR</strong> (direction) pin using a <strong>male-to-male jumper wire</strong>. Setting this pin <strong>HIGH</strong> makes the motor spin clockwise; setting it <strong>LOW</strong> makes it spin counter-clockwise.' },
+      { num: 6, title: 'Arduino 5V → A4988 VDD and Arduino GND → A4988 GND — male-to-male', detail: 'Connect Arduino <strong>5V</strong> to A4988 <strong>VDD</strong> and Arduino <strong>GND</strong> to A4988 <strong>GND</strong> using <strong>male-to-male jumper wires</strong>. The A4988 chip itself needs 5V logic power separately from the 12V motor power — both supplies share a common ground.' },
     ],
     code: `#define STEP 2\n#define DIR  3\n\nvoid setup() {\n  pinMode(STEP, OUTPUT);\n  pinMode(DIR, OUTPUT);\n  digitalWrite(DIR, HIGH);\n}\n\nvoid loop() {\n  digitalWrite(STEP, HIGH);\n  delayMicroseconds(800);\n  digitalWrite(STEP, LOW);\n  delayMicroseconds(800);\n}`,
     color: '#6B766F',
@@ -4128,19 +4128,19 @@ const lessons = [
     time: '45 min', diff: 'advanced', locked: true,
     heroPhoto: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',
     parts: [
-      { name: 'ESP32 DevKit v1', qty: 1 },
-      { name: 'OLED 128×64 (I2C)', qty: 1 },
-      { name: 'Breadboard', qty: 1 },
-      { name: 'Jumper Wires', qty: 4 },
-      { name: 'USB-C cable', qty: 1 },
+      { name: 'ESP32 DevKit v1', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ESP32_Espressif_ESP-WROOM-32_Dev_Board.jpg/320px-ESP32_Espressif_ESP-WROOM-32_Dev_Board.jpg' },
+      { name: 'OLED 128×64 (I2C)', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/OLED_screen.jpg/200px-OLED_screen.jpg' },
+      { name: 'Breadboard', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg' },
+      { name: 'Male-to-Male Jumper Wires', qty: 4, photo: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg' },
+      { name: 'USB-C cable', qty: 1, photo: 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg' },
     ],
     wiring: [
-      { num: 1, title: 'ESP32 is different from Uno', detail: 'The ESP32 runs at <strong>3.3V</strong>, not 5V. Use the 3V3 pin for power — never connect 5V directly to any ESP32 signal pin.' },
-      { num: 2, title: 'Insert OLED into breadboard', detail: 'OLED 4 pins: <strong>GND, VCC, SCL, SDA</strong> into holes <strong>14e–17e</strong>.' },
-      { num: 3, title: 'Black — GND → 14c', detail: 'ESP32 <strong>GND</strong> → hole <strong>14c</strong>.' },
-      { num: 4, title: 'Red — 3.3V → 15c', detail: 'ESP32 <strong>3V3</strong> → hole <strong>15c</strong>. Do NOT use 5V.' },
-      { num: 5, title: 'Yellow — GPIO 22 (SCL) → 16c', detail: 'ESP32 <strong>GPIO 22</strong> is the I2C clock → hole <strong>16c</strong>.' },
-      { num: 6, title: 'Blue — GPIO 21 (SDA) → 17c', detail: 'ESP32 <strong>GPIO 21</strong> is the I2C data → hole <strong>17c</strong>. Enter your WiFi credentials in the sketch and it pulls live weather from Open-Meteo (free, no API key).' },
+      { num: 1, title: 'Important: the ESP32 runs at 3.3V, not 5V', detail: 'Unlike the Arduino Uno, the ESP32 uses <strong>3.3V</strong> logic and power. Never connect the OLED or any component to the ESP32\'s 5V pin — always use the <strong>3V3</strong> pin for power. Connecting 5V to any ESP32 signal pin can permanently damage the chip.' },
+      { num: 2, title: 'Insert the OLED module into the breadboard', detail: 'The OLED has 4 pins: <strong>GND</strong>, <strong>VCC</strong>, <strong>SCL</strong>, <strong>SDA</strong>. Insert them into holes <strong>14e, 15e, 16e, and 17e</strong>. The I2C protocol (SCL + SDA) lets the ESP32 send the full display image using just two wires.' },
+      { num: 3, title: 'Black wire — ESP32 GND → hole 14c — male-to-male', detail: 'Connect the ESP32 <strong>GND</strong> pin to hole <strong>14c</strong> using a <strong>male-to-male jumper wire</strong>. This grounds the OLED and ensures all components share a common reference voltage.' },
+      { num: 4, title: 'Red wire — ESP32 3V3 → hole 15c — male-to-male', detail: 'Connect the ESP32 <strong>3V3</strong> pin to hole <strong>15c</strong> using a <strong>male-to-male jumper wire</strong>. This provides 3.3V power to the OLED — do NOT use the 5V pin here or you will damage the display.' },
+      { num: 5, title: 'Yellow wire — GPIO 22 (SCL) → hole 16c — male-to-male', detail: 'Connect ESP32 <strong>GPIO 22</strong> to hole <strong>16c</strong> using a <strong>male-to-male jumper wire</strong>. On the ESP32, GPIO 22 is the default I2C clock line (SCL) — it synchronises data timing between the ESP32 and the OLED.' },
+      { num: 6, title: 'Blue wire — GPIO 21 (SDA) → hole 17c — male-to-male', detail: 'Connect ESP32 <strong>GPIO 21</strong> to hole <strong>17c</strong> using a <strong>male-to-male jumper wire</strong>. GPIO 21 is the default I2C data line (SDA) on the ESP32 — this carries all the display data. Before uploading, edit the sketch to replace <strong>YOUR_WIFI</strong> and <strong>YOUR_PASS</strong> with your real WiFi name and password.' },
     ],
     code: `#include <WiFi.h>\n#include <HTTPClient.h>\n// Add your SSID and password\nconst char* ssid = "YOUR_WIFI";\nconst char* pass = "YOUR_PASS";\n\nvoid setup() {\n  Serial.begin(115200);\n  WiFi.begin(ssid, pass);\n  while (WiFi.status() != WL_CONNECTED) delay(500);\n  Serial.println("Connected!");\n}\n\nvoid loop() {\n  HTTPClient http;\n  http.begin("https://api.open-meteo.com/v1/forecast"\n    "?latitude=40.71&longitude=-74.01"\n    "&current_weather=true");\n  int code = http.GET();\n  if (code == 200) Serial.println(http.getString());\n  delay(60000);\n}`,
     color: '#4A7BA7',
@@ -4151,11 +4151,17 @@ const lessons = [
   {
     id:"sos-blink", title:"SOS Morse Code Blinker", desc:"Blink an LED in the SOS pattern using timing logic.",
     time:"10 min", diff:"beginner", locked:true, color:"#C62E2E", icon:"🆘", tags:["beginner","led"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"LED (any color)",qty:1},{name:"220Ω Resistor",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:2}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"LED (any color)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/f/f2/LG_Red_LED.jpg"},
+      {name:"220Ω Resistor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:2,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Wire the LED",detail:"LED anode (long leg) to hole 14e, cathode to hole 15e. 220Ω resistor from 15a to 20a."},
-      {num:2,title:"Red wire — Pin 13 → 14a",detail:"Arduino Pin 13 to hole 14a."},
-      {num:3,title:"Black wire — GND → 20c",detail:"Arduino GND to hole 20c. Upload sketch."},
+      {num:1,title:"Insert the LED and resistor",detail:"Push the LED into the breadboard with the <strong>long leg (anode) in hole 14e</strong> and the <strong>short leg (cathode) in hole 15e</strong>. Then insert the <strong>220Ω resistor</strong> with one leg in hole <strong>15a</strong> and the other in hole <strong>20a</strong> — the resistor protects the LED from burning out by limiting how much current flows through it."},
+      {num:2,title:"Red wire — Pin 13 → hole 14a — male-to-male",detail:"Connect Arduino <strong>Pin 13</strong> to hole <strong>14a</strong> using a <strong>male-to-male jumper wire</strong>. This sends the on/off signal from the Arduino to the anode of the LED, turning it on and off in the SOS pattern."},
+      {num:3,title:"Black wire — GND → hole 20c — male-to-male",detail:"Connect Arduino <strong>GND</strong> to hole <strong>20c</strong> using a <strong>male-to-male jumper wire</strong>. This grounds the end of the resistor, completing the circuit so electricity can flow. Upload the sketch below using the <strong>Upload button (→)</strong> in the Arduino IDE and watch your LED blink SOS!"},
     ],
     code:`// SOS: ... --- ...
 const int DOT=200,DASH=600,GAP=200,LGAP=600;
@@ -4173,12 +4179,20 @@ void loop(){
   {
     id:"dual-led", title:"Traffic Light (3 LEDs)", desc:"Simulate a traffic light sequence with red, yellow, and green LEDs.",
     time:"12 min", diff:"beginner", locked:true, color:"#2D5D3F", icon:"🚦", tags:["beginner","led"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"Red LED",qty:1},{name:"Yellow LED",qty:1},{name:"Green LED",qty:1},{name:"220Ω Resistor",qty:3},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:6}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"Red LED",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/f/f2/LG_Red_LED.jpg"},
+      {name:"Yellow LED",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/f/f2/LG_Red_LED.jpg"},
+      {name:"Green LED",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/f/f2/LG_Red_LED.jpg"},
+      {name:"220Ω Resistor",qty:3,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:6,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Insert 3 LEDs",detail:"Red LED anode at 10e, Yellow at 13e, Green at 16e. All cathodes in the row below."},
-      {num:2,title:"Add 3 resistors",detail:"220Ω from 10a to 15a, 13a to 18a, 16a to 21a."},
-      {num:3,title:"Signal wires",detail:"Pin 11 to 10a (red), Pin 10 to 13a (yellow), Pin 9 to 16a (green)."},
-      {num:4,title:"Ground wire",detail:"Arduino GND to hole 15c, bridge ground rail for all cathodes."},
+      {num:1,title:"Insert the 3 LEDs into the breadboard",detail:"Insert the <strong>Red LED</strong> with its long leg (anode) in hole <strong>10e</strong> and short leg (cathode) in hole <strong>11e</strong>. Insert the <strong>Yellow LED</strong> with anode in hole <strong>13e</strong> and cathode in hole <strong>14e</strong>. Insert the <strong>Green LED</strong> with anode in hole <strong>16e</strong> and cathode in hole <strong>17e</strong>. Spread them out so they look like a traffic light from top to bottom."},
+      {num:2,title:"Add a 220Ω resistor for each LED",detail:"Insert one <strong>220Ω resistor</strong> from hole <strong>11a to 15a</strong> (red LED), one from hole <strong>14a to 18a</strong> (yellow LED), and one from hole <strong>17a to 21a</strong> (green LED). Each resistor limits the current to that LED — without them, the LEDs would burn out instantly."},
+      {num:3,title:"Signal wires — Pins 11, 10, 9 to LED anodes — male-to-male",detail:"Connect Arduino <strong>Pin 11</strong> to hole <strong>10a</strong> (red LED), Arduino <strong>Pin 10</strong> to hole <strong>13a</strong> (yellow LED), and Arduino <strong>Pin 9</strong> to hole <strong>16a</strong> (green LED) using <strong>male-to-male jumper wires</strong>. These three wires carry the on/off signals from the Arduino to each LED."},
+      {num:4,title:"Black wires — GND to all resistor ends — male-to-male",detail:"Connect Arduino <strong>GND</strong> to holes <strong>15c, 18c, and 21c</strong> using <strong>male-to-male jumper wires</strong> — one for each LED's resistor end. This grounds all three LEDs so electricity can complete its path from the Arduino pins through each LED and back to ground."},
     ],
     code:`void setup(){
   pinMode(11,OUTPUT);
@@ -4198,9 +4212,17 @@ void loop(){
   {
     id:"pwm-fade", title:"LED Breathing Effect", desc:"Make an LED slowly pulse in and out using PWM analogWrite.",
     time:"8 min", diff:"beginner", locked:true, color:"#E8956B", icon:"🌊", tags:["beginner","led"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"LED (any color)",qty:1},{name:"220Ω Resistor",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:2}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"LED (any color)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/f/f2/LG_Red_LED.jpg"},
+      {name:"220Ω Resistor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:2,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Wire LED to Pin 9 (PWM)",detail:"LED anode to hole 14e, cathode to 15e. Resistor 15a to 20a. Red wire: Pin 9 to 14a. Black wire: GND to 20c."},
+      {num:1,title:"Insert the LED into the breadboard",detail:"Push the LED into the breadboard with the <strong>long leg (anode) in hole 14e</strong> and the <strong>short leg (cathode) in hole 15e</strong>. Then insert the <strong>220Ω resistor</strong> with one leg in hole <strong>15a</strong> and the other in hole <strong>20a</strong> — the resistor protects the LED from burning out."},
+      {num:2,title:"Red wire — Pin 9 → hole 14a — male-to-male",detail:"Connect Arduino <strong>Pin 9</strong> to hole <strong>14a</strong> using a <strong>male-to-male jumper wire</strong>. Pin 9 is a PWM pin (look for the ~ symbol next to it on the board) — this allows the Arduino to vary the LED brightness by rapidly switching it on and off hundreds of times per second."},
+      {num:3,title:"Black wire — GND → hole 20c — male-to-male",detail:"Connect Arduino <strong>GND</strong> to hole <strong>20c</strong> using a <strong>male-to-male jumper wire</strong>. This completes the circuit by providing a return path for the current. Once uploaded, the LED will slowly brighten to full then dim back to off, repeating the breathing effect continuously."},
     ],
     code:`void setup(){pinMode(9,OUTPUT);}
 void loop(){
@@ -4211,11 +4233,16 @@ void loop(){
   {
     id:"tone-buzzer", title:"Piezo Buzzer Melody", desc:"Play a simple melody using the tone() function and a piezo buzzer.",
     time:"10 min", diff:"beginner", locked:true, color:"#B8935A", icon:"🎵", tags:["beginner"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"Piezo Buzzer",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:2}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"Piezo Buzzer",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/6/64/Piezo_Buzzer.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:2,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Insert piezo buzzer",detail:"Buzzer positive leg to hole 14e, negative leg to 15e."},
-      {num:2,title:"Signal wire — Pin 8 → 14a",detail:"Arduino Pin 8 to hole 14a."},
-      {num:3,title:"Ground wire — GND → 15a",detail:"Arduino GND to hole 15a. No resistor needed for a piezo."},
+      {num:1,title:"Insert the piezo buzzer into the breadboard",detail:"A piezo buzzer has two legs — one marked with a <strong>+</strong> (positive) and one unmarked (negative). Insert the <strong>positive leg into hole 14e</strong> and the <strong>negative leg into hole 15e</strong>. No resistor is needed — a piezo buzzer is safe to connect directly to Arduino pins."},
+      {num:2,title:"Red wire — Pin 8 → hole 14a — male-to-male",detail:"Connect Arduino <strong>Pin 8</strong> to hole <strong>14a</strong> using a <strong>male-to-male jumper wire</strong>. The Arduino will send rapid voltage changes through this pin to vibrate the piezo crystal inside the buzzer, producing sound — higher frequency = higher pitch."},
+      {num:3,title:"Black wire — GND → hole 15a — male-to-male",detail:"Connect Arduino <strong>GND</strong> to hole <strong>15a</strong> using a <strong>male-to-male jumper wire</strong>. This connects to the negative leg of the buzzer and completes the circuit. Upload the sketch below using the <strong>Upload button (→)</strong> and the melody will play once on startup."},
     ],
     code:`int melody[]={262,294,330,262,262,294,330,262,330,349,392,0,330,349,392,0};
 int dur[]={400,400,400,400,400,400,400,400,400,400,800,200,400,400,800,400};
@@ -4230,10 +4257,13 @@ void loop(){}`,
   {
     id:"serial-input", title:"Serial Chat", desc:"Send text from your computer to the Arduino and get a response back.",
     time:"10 min", diff:"beginner", locked:true, color:"#2D5D3F", icon:"💬", tags:["beginner"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"USB Cable",qty:1}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"USB Cable",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"No extra wiring needed",detail:"Just plug the Arduino into your computer via USB."},
-      {num:2,title:"Upload and open Serial Monitor",detail:"Set baud to 9600. Type anything and hit Send — the Arduino echoes it back in uppercase."},
+      {num:1,title:"No extra wiring needed — just the USB cable",detail:"For this lesson you only need to plug your Arduino into your computer using the <strong>USB cable</strong>. The USB cable does two things at once: it powers the Arduino from your computer and it creates a two-way communication channel called <strong>Serial</strong> so the Arduino and your computer can send messages to each other."},
+      {num:2,title:"Upload the sketch and open the Serial Monitor",detail:"Upload the sketch below using the <strong>Upload button (→)</strong> in the Arduino IDE. Then open the Serial Monitor by clicking <strong>Tools → Serial Monitor</strong> — set the baud rate dropdown to <strong>9600</strong>. Type anything in the text box at the top, press Send, and the Arduino will echo your message back in UPPERCASE."},
     ],
     code:`void setup(){Serial.begin(9600); Serial.println("Ready! Type something.");}
 void loop(){
@@ -4247,12 +4277,18 @@ void loop(){
   {
     id:"ldr-light", title:"Light Sensor + Serial", desc:"Read a photoresistor and print light levels to the Serial Monitor.",
     time:"12 min", diff:"beginner", locked:true, color:"#C8953A", icon:"☀️", tags:["beginner","sensor"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"Photoresistor (LDR)",qty:1},{name:"10kΩ Resistor",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:3}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"Photoresistor (LDR)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Photo_diode_1.JPG/200px-Photo_diode_1.JPG"},
+      {name:"10kΩ Resistor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:3,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Build voltage divider",detail:"Insert LDR into holes 14e and 15e. Insert 10kΩ resistor from 15a to 20a."},
-      {num:2,title:"Red wire — 5V → 14c",detail:"Powers the LDR."},
-      {num:3,title:"Yellow wire — A0 → 15c",detail:"Arduino A0 reads the midpoint voltage — changes with light level."},
-      {num:4,title:"Black wire — GND → 20c",detail:"Grounds the resistor. Open Serial Monitor to see values change."},
+      {num:1,title:"Build the voltage divider — LDR and 10kΩ resistor",detail:"Insert the <strong>LDR (light-dependent resistor)</strong> with one leg in hole <strong>14e</strong> and the other in hole <strong>15e</strong>. Then insert the <strong>10kΩ resistor</strong> from hole <strong>15a</strong> to hole <strong>20a</strong>. Together they form a voltage divider — as light changes the LDR's resistance, the voltage at the midpoint (hole 15) changes too."},
+      {num:2,title:"Red wire — 5V → hole 14c — male-to-male",detail:"Connect Arduino <strong>5V</strong> to hole <strong>14c</strong> using a <strong>male-to-male jumper wire</strong>. This applies 5V to one end of the LDR, giving it the power it needs to produce a voltage signal that varies with light."},
+      {num:3,title:"Yellow wire — A0 → hole 15c — male-to-male",detail:"Connect Arduino <strong>A0</strong> to hole <strong>15c</strong> using a <strong>male-to-male jumper wire</strong>. A0 reads the midpoint voltage between the LDR and resistor — bright light makes the LDR resistance drop, raising the voltage and giving a high reading; dim light raises the LDR resistance, dropping the voltage."},
+      {num:4,title:"Black wire — GND → hole 20c — male-to-male",detail:"Connect Arduino <strong>GND</strong> to hole <strong>20c</strong> using a <strong>male-to-male jumper wire</strong>. This grounds the other end of the 10kΩ resistor. Upload the sketch, open <strong>Tools → Serial Monitor</strong> at 9600 baud, and cover or shine a light on the LDR — watch the numbers change!"},
     ],
     code:`void setup(){Serial.begin(9600);}
 void loop(){
@@ -4264,12 +4300,17 @@ void loop(){
   {
     id:"temp-sensor", title:"Temperature Sensor (TMP36)", desc:"Read real-time temperature in Celsius and Fahrenheit from a TMP36.",
     time:"15 min", diff:"beginner", locked:true, color:"#C62E2E", icon:"🌡️", tags:["beginner","sensor"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"TMP36 Temperature Sensor",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:3}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"TMP36 Temperature Sensor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Resistor.jpg/200px-Resistor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:3,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Insert TMP36",detail:"Flat face toward you: left pin = VCC, middle = output, right = GND. Insert into holes 14e, 15e, 16e."},
-      {num:2,title:"Red wire — 5V → 14c",detail:"Powers the sensor."},
-      {num:3,title:"Yellow wire — A0 → 15c",detail:"Reads the output voltage."},
-      {num:4,title:"Black wire — GND → 16c",detail:"Grounds the sensor."},
+      {num:1,title:"Insert the TMP36 sensor correctly",detail:"Hold the TMP36 with the flat face (the side with writing on it) pointing toward you. From left to right the three pins are: <strong>VCC (power)</strong>, <strong>Signal (output)</strong>, and <strong>GND (ground)</strong>. Insert them into holes <strong>14e, 15e, and 16e</strong>. Getting the orientation wrong could damage the sensor, so double-check before powering on."},
+      {num:2,title:"Red wire — 5V → hole 14c — male-to-male",detail:"Connect Arduino <strong>5V</strong> to hole <strong>14c</strong> using a <strong>male-to-male jumper wire</strong>. This powers the TMP36 — it only needs 5V and draws almost no current, so it is perfectly safe to power from the Arduino."},
+      {num:3,title:"Yellow wire — A0 → hole 15c — male-to-male",detail:"Connect Arduino <strong>A0</strong> to hole <strong>15c</strong> using a <strong>male-to-male jumper wire</strong>. The TMP36 outputs a voltage that increases as temperature rises — 0.5V at 0°C and about 0.75V at 25°C. The sketch converts this voltage to degrees Celsius and Fahrenheit."},
+      {num:4,title:"Black wire — GND → hole 16c — male-to-male",detail:"Connect Arduino <strong>GND</strong> to hole <strong>16c</strong> using a <strong>male-to-male jumper wire</strong>. This grounds the TMP36 and completes the circuit. Upload the sketch, open <strong>Tools → Serial Monitor</strong> at 9600 baud, and you will see the temperature reading update every second."},
     ],
     code:`void setup(){Serial.begin(9600);}
 void loop(){
@@ -4284,11 +4325,17 @@ void loop(){
   {
     id:"7seg", title:"7-Segment Display Counter", desc:"Display digits 0-9 on a single 7-segment display.",
     time:"20 min", diff:"beginner", locked:true, color:"#E8956B", icon:"🔢", tags:["beginner","display"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"7-Segment Display (common cathode)",qty:1},{name:"220Ω Resistor",qty:7},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:9}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"7-Segment Display (common cathode)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/7_segment_display_labeled.svg/200px-7_segment_display_labeled.svg.png"},
+      {name:"220Ω Resistor",qty:7,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:9,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Insert display into breadboard",detail:"Place 7-segment display straddling center gap around column 20."},
-      {num:2,title:"Segment resistors",detail:"Each of 7 segment pins (a-g) gets its own 220Ω resistor to an Arduino pin: a=2, b=3, c=4, d=5, e=6, f=7, g=8."},
-      {num:3,title:"Common cathode → GND",detail:"The common pin connects to Arduino GND."},
+      {num:1,title:"Insert the 7-segment display into the breadboard",detail:"A 7-segment display has <strong>10 pins</strong> — 5 on each side. Place it straddling the center gap of the breadboard around <strong>column 20</strong>, with 5 pins on each side sitting in the board. Each of the 7 segments (labeled <strong>a through g</strong>) is a tiny LED that you control individually to form digits."},
+      {num:2,title:"Add a 220Ω resistor for each of the 7 segment pins",detail:"Each segment pin (a through g) needs its own <strong>220Ω resistor</strong> to protect the LED inside it. Connect the resistors so they link each segment pin to its Arduino pin: segment <strong>a → Pin 2</strong>, <strong>b → Pin 3</strong>, <strong>c → Pin 4</strong>, <strong>d → Pin 5</strong>, <strong>e → Pin 6</strong>, <strong>f → Pin 7</strong>, <strong>g → Pin 8</strong>. Use <strong>male-to-male jumper wires</strong> to bridge the breadboard rows to the Arduino."},
+      {num:3,title:"Black wire — common cathode pin → GND — male-to-male",detail:"The common cathode display has one (or two) shared GND pins — connect these to Arduino <strong>GND</strong> using a <strong>male-to-male jumper wire</strong>. This is the shared return path for all 7 LED segments — without it, none of the segments will light up even if all the signal wires are correct."},
     ],
     code:`const byte digits[10]={0b00111111,0b00000110,0b01011011,0b01001111,0b01100110,0b01101101,0b01111101,0b00000111,0b01111111,0b01101111};
 const int pins[]={2,3,4,5,6,7,8};
@@ -4299,11 +4346,17 @@ void loop(){for(int n=0;n<10;n++){showDigit(digits[n]);delay(800);}}`,
   {
     id:"dht11", title:"DHT11 Humidity + Temp", desc:"Read temperature and humidity with the popular DHT11 sensor.",
     time:"15 min", diff:"beginner", locked:true, color:"#4A7BA7", icon:"💧", tags:["beginner","sensor"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"DHT11 Sensor",qty:1},{name:"10kΩ Resistor",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:3}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"DHT11 Sensor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DHT11_Humidity_%26_Temperature_Sensor.jpg/200px-DHT11_Humidity_%26_Temperature_Sensor.jpg"},
+      {name:"10kΩ Resistor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:3,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Insert DHT11",detail:"DHT11 has 3 usable pins: VCC, DATA, GND. Insert into holes 14e, 15e, 16e."},
-      {num:2,title:"Pull-up resistor on data pin",detail:"10kΩ from hole 15a to 14a (data to VCC). Required for reliable readings."},
-      {num:3,title:"Power and signal wires",detail:"Red: 5V to 14c. Yellow: Pin 2 to 15c. Black: GND to 16c. Install the DHT library first."},
+      {num:1,title:"Insert the DHT11 sensor into the breadboard",detail:"The DHT11 sensor has <strong>3 pins</strong> (some modules) or <strong>4 pins</strong> (bare sensor). On a 3-pin module, the pins are <strong>VCC</strong>, <strong>DATA</strong>, and <strong>GND</strong> from left to right. Insert them into holes <strong>14e, 15e, and 16e</strong>. The flat front of the sensor should face outward — it has a grid of tiny holes for measuring humidity."},
+      {num:2,title:"10kΩ pull-up resistor — hole 15a to hole 14a",detail:"Insert the <strong>10kΩ resistor</strong> between hole <strong>15a</strong> (DATA pin) and hole <strong>14a</strong> (VCC pin). This is called a pull-up resistor — it keeps the DATA line at a stable HIGH voltage when no data is being sent, which prevents false readings and communication errors."},
+      {num:3,title:"Power, signal, and ground wires — male-to-male",detail:"Connect Arduino <strong>5V</strong> to hole <strong>14c</strong> (red wire), Arduino <strong>Pin 2</strong> to hole <strong>15c</strong> (yellow wire), and Arduino <strong>GND</strong> to hole <strong>16c</strong> (black wire) using <strong>male-to-male jumper wires</strong>. Before uploading, install the <strong>DHT sensor library by Adafruit</strong>: go to <strong>Tools → Manage Libraries</strong>, search for <strong>DHT sensor library</strong> and click Install."},
     ],
     code:`#include <DHT.h>
 DHT dht(2,DHT11);
@@ -4318,11 +4371,18 @@ void loop(){
   {
     id:"reed-switch", title:"Reed Switch Door Alarm", desc:"Detect when a door opens using a magnetic reed switch.",
     time:"12 min", diff:"beginner", locked:true, color:"#6B766F", icon:"🚪", tags:["beginner","sensor"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"Reed Switch",qty:1},{name:"10kΩ Resistor",qty:1},{name:"Piezo Buzzer",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:4}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"Reed Switch",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Reed_switch.JPG/200px-Reed_switch.JPG"},
+      {name:"10kΩ Resistor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"Piezo Buzzer",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/6/64/Piezo_Buzzer.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:4,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Reed switch with pull-up",detail:"Reed switch between hole 14e and GND. 10kΩ from hole 14a to 5V. Yellow wire: Pin 2 to 14c."},
-      {num:2,title:"Piezo buzzer on Pin 8",detail:"Buzzer positive to hole 20e. Pin 8 to 20a. GND to 21a."},
-      {num:3,title:"Test it",detail:"Magnet near switch = silent (door closed). Remove magnet = alarm sounds."},
+      {num:1,title:"Wire the reed switch with a pull-up resistor",detail:"Insert the <strong>reed switch</strong> with one leg in hole <strong>14e</strong> and the other in hole <strong>14f</strong> (or connect the other leg to GND). Insert the <strong>10kΩ resistor</strong> from hole <strong>14a</strong> to the <strong>5V rail</strong>. Connect Arduino <strong>Pin 2</strong> to hole <strong>14c</strong> with a <strong>male-to-male jumper wire</strong>. The resistor keeps Pin 2 HIGH when the magnet is present; when the magnet is removed the switch opens and Pin 2 floats LOW."},
+      {num:2,title:"Wire the piezo buzzer on Pin 8",detail:"Insert the buzzer with the <strong>positive leg in hole 20e</strong> and negative leg in hole <strong>21e</strong>. Connect Arduino <strong>Pin 8</strong> to hole <strong>20a</strong> and Arduino <strong>GND</strong> to hole <strong>21a</strong> using <strong>male-to-male jumper wires</strong>. When the door opens (magnet removed), the Arduino triggers the buzzer to sound the alarm."},
+      {num:3,title:"Test the alarm with a magnet",detail:"Hold a magnet next to the reed switch — the switch closes and the buzzer stays silent (door closed). Pull the magnet away — the switch opens and the buzzer sounds (door open). Tape the reed switch to a door frame and the magnet to the door for a real alarm."},
     ],
     code:`void setup(){
   pinMode(2,INPUT_PULLUP);
@@ -4337,10 +4397,15 @@ void loop(){
   {
     id:"i2c-scan", title:"I2C Device Scanner", desc:"Detect all I2C devices on the bus and print their addresses.",
     time:"10 min", diff:"intermediate", locked:true, color:"#2D5D3F", icon:"🔍", tags:["intermediate","protocols"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"Any I2C device (OLED, sensor)",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:4}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"Any I2C device (OLED, sensor)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/OLED_screen.jpg/200px-OLED_screen.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:4,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Connect your I2C device",detail:"SDA to Arduino A4, SCL to Arduino A5, VCC to 5V, GND to GND."},
-      {num:2,title:"Open Serial Monitor at 9600",detail:"Upload the sketch — it scans all 127 addresses and reports which respond. OLED is usually 0x3C."},
+      {num:1,title:"Connect your I2C device — 4 wires total — male-to-male",detail:"Every I2C device uses the same 4 connections: connect <strong>SDA</strong> to Arduino <strong>A4</strong>, <strong>SCL</strong> to Arduino <strong>A5</strong>, <strong>VCC</strong> to Arduino <strong>5V</strong>, and <strong>GND</strong> to Arduino <strong>GND</strong> using <strong>male-to-male jumper wires</strong>. I2C is a shared bus — you can connect multiple devices on the same SDA and SCL lines at the same time, each with its own unique address."},
+      {num:2,title:"Upload the sketch and open the Serial Monitor",detail:"Upload the sketch below using the <strong>Upload button (→)</strong> in the Arduino IDE. Then open <strong>Tools → Serial Monitor</strong> and set the baud rate to <strong>9600</strong>. The sketch checks every possible I2C address from 1 to 127 and prints which ones respond — an OLED display is typically at address <strong>0x3C</strong> and an LCD backpack is typically at <strong>0x27</strong>."},
     ],
     code:`#include <Wire.h>
 void setup(){
@@ -4360,12 +4425,17 @@ void loop(){}`,
   {
     id:"joystick", title:"Joystick Controller", desc:"Read X/Y axes and button from a PS2-style joystick module.",
     time:"15 min", diff:"intermediate", locked:true, color:"#3D4A42", icon:"🕹️", tags:["intermediate","sensor"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"Joystick Module (KY-023)",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:5}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"Joystick Module (KY-023)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Potentiometer.jpg/200px-Potentiometer.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:5,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Joystick has 5 pins",detail:"GND, +5V, VRx, VRy, SW. Connect to breadboard holes 14e to 18e."},
-      {num:2,title:"Power and ground",detail:"Red: 5V to 15c. Black: GND to 14c."},
-      {num:3,title:"Analog axes",detail:"Yellow: A0 to 16c (X axis). Orange: A1 to 17c (Y axis)."},
-      {num:4,title:"Button",detail:"Purple: Pin 2 to 18c (SW pin). Center value is about 512. Push down reads LOW."},
+      {num:1,title:"Insert the joystick module into the breadboard",detail:"The joystick module has <strong>5 pins</strong> labeled: <strong>GND</strong>, <strong>+5V</strong>, <strong>VRx</strong> (X axis), <strong>VRy</strong> (Y axis), and <strong>SW</strong> (button). Insert them into holes <strong>14e through 18e</strong>. The joystick is basically two potentiometers (one per axis) plus a push button, all in one neat package."},
+      {num:2,title:"Power and ground — red and black wires — male-to-male",detail:"Connect Arduino <strong>5V</strong> to hole <strong>15c</strong> (red wire) and Arduino <strong>GND</strong> to hole <strong>14c</strong> (black wire) using <strong>male-to-male jumper wires</strong>. These power the two potentiometers inside the joystick so they output a voltage that changes as you move the stick."},
+      {num:3,title:"Analog axes — A0 and A1 — male-to-male",detail:"Connect Arduino <strong>A0</strong> to hole <strong>16c</strong> (yellow wire, X axis) and Arduino <strong>A1</strong> to hole <strong>17c</strong> (orange wire, Y axis) using <strong>male-to-male jumper wires</strong>. When the stick is in the center, both axes read about <strong>512</strong>. Push fully in one direction to get 0; the other direction gives 1023."},
+      {num:4,title:"Button — Pin 2 → hole 18c — male-to-male",detail:"Connect Arduino <strong>Pin 2</strong> to hole <strong>18c</strong> (SW pin) using a <strong>male-to-male jumper wire</strong>. The button inside the joystick reads <strong>LOW</strong> when pressed and <strong>HIGH</strong> when released — the sketch uses INPUT_PULLUP so you do not need an external resistor."},
     ],
     code:`void setup(){Serial.begin(9600); pinMode(2,INPUT_PULLUP);}
 void loop(){
@@ -4380,11 +4450,17 @@ void loop(){
   {
     id:"ir-remote", title:"IR Remote Control", desc:"Receive and decode signals from any TV remote using an IR receiver.",
     time:"20 min", diff:"intermediate", locked:true, color:"#1C2820", icon:"📺", tags:["intermediate"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"IR Receiver (TSOP38238)",qty:1},{name:"Any IR Remote",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:3}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"IR Receiver (TSOP38238)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Photo_diode_1.JPG/200px-Photo_diode_1.JPG"},
+      {name:"Any IR Remote",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Photo_diode_1.JPG/200px-Photo_diode_1.JPG"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:3,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Insert IR receiver",detail:"Flat face toward you. Left = OUT, middle = GND, right = VCC. Insert into holes 14e, 15e, 16e."},
-      {num:2,title:"Red 5V to 16c. Black GND to 15c. Yellow Pin 11 to 14c",detail:"Install the IRremote library from Library Manager first."},
-      {num:3,title:"Point remote, press buttons",detail:"Open Serial Monitor — each button prints a unique HEX code you can map to actions."},
+      {num:1,title:"Insert the IR receiver into the breadboard",detail:"Hold the IR receiver with the <strong>flat (dome-front) face pointing away from you</strong>. Looking at the flat face with pins at the bottom, from left to right the pins are: <strong>OUT</strong> (signal), <strong>GND</strong>, <strong>VCC</strong>. Insert them into holes <strong>14e, 15e, and 16e</strong>. The receiver detects invisible infrared light pulses from the remote and converts them into a digital signal the Arduino can read."},
+      {num:2,title:"Power, ground, and signal wires — male-to-male",detail:"Connect Arduino <strong>5V</strong> to hole <strong>16c</strong> (red wire), Arduino <strong>GND</strong> to hole <strong>15c</strong> (black wire), and Arduino <strong>Pin 11</strong> to hole <strong>14c</strong> (yellow wire) using <strong>male-to-male jumper wires</strong>. Before uploading, install the <strong>IRremote library</strong>: go to <strong>Tools → Manage Libraries</strong>, search for <strong>IRremote</strong> and click Install."},
+      {num:3,title:"Point any TV remote at the receiver and press buttons",detail:"Upload the sketch, open <strong>Tools → Serial Monitor</strong> at 9600 baud, then point any IR remote at the receiver and press buttons. Each button press prints a unique <strong>HEX code</strong> — write these down and use them in your own projects to trigger different actions with different buttons."},
     ],
     code:`#include <IRremote.h>
 IRrecv ir(11);
@@ -4400,11 +4476,16 @@ void loop(){
   {
     id:"lcd-i2c", title:"LCD Display I2C (16x2)", desc:"Print text to a 16x2 character LCD using the I2C backpack.",
     time:"20 min", diff:"intermediate", locked:true, color:"#4A7BA7", icon:"📟", tags:["intermediate","display"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"16x2 LCD with I2C backpack",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:4}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"16x2 LCD with I2C backpack",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Arduino_LCD_circuit.jpg/200px-Arduino_LCD_circuit.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:4,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"4 wires only (I2C backpack)",detail:"GND to Arduino GND, VCC to 5V, SDA to A4, SCL to A5."},
-      {num:2,title:"Install library",detail:"Library Manager, search LiquidCrystal_I2C by Frank de Brabander, Install."},
-      {num:3,title:"Find I2C address",detail:"Run the I2C Scanner lesson first. LCD backpacks are usually 0x27 or 0x3F."},
+      {num:1,title:"Connect the 4 I2C backpack wires — male-to-male",detail:"The I2C backpack is a small board already soldered to the back of the LCD that reduces 16 wires down to just 4. Connect: <strong>GND</strong> to Arduino <strong>GND</strong>, <strong>VCC</strong> to Arduino <strong>5V</strong>, <strong>SDA</strong> to Arduino <strong>A4</strong>, and <strong>SCL</strong> to Arduino <strong>A5</strong> using <strong>male-to-male jumper wires</strong>. That is all the wiring needed — the I2C protocol handles everything else over just those two data lines."},
+      {num:2,title:"Install the LiquidCrystal_I2C library",detail:"Before uploading, install the display library: in the Arduino IDE go to <strong>Tools → Manage Libraries</strong>, search for <strong>LiquidCrystal I2C</strong> by Frank de Brabander, and click Install. This library makes it simple to print text and control the backlight with just a few commands."},
+      {num:3,title:"Find the correct I2C address for your LCD",detail:"LCD I2C backpacks come in two common versions with different addresses: <strong>0x27</strong> or <strong>0x3F</strong>. If the sketch compiles and uploads but nothing appears on screen, run the <strong>I2C Scanner</strong> lesson first to find your exact address, then update the address in the sketch accordingly."},
     ],
     code:`#include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27,16,2);
@@ -4418,12 +4499,19 @@ void loop(){}`,
   {
     id:"neopixel", title:"NeoPixel LED Strip", desc:"Control individually addressable RGB LEDs with the FastLED library.",
     time:"25 min", diff:"intermediate", locked:true, color:"#9B59B6", icon:"✨", tags:["intermediate","led"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"WS2812B NeoPixel Strip (8+ LEDs)",qty:1},{name:"470Ω Resistor",qty:1},{name:"1000µF Capacitor",qty:1},{name:"5V 2A Power Supply",qty:1},{name:"Jumper Wires",qty:3}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"WS2812B NeoPixel Strip (8+ LEDs)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/LED_RGB.jpg/200px-LED_RGB.jpg"},
+      {name:"470Ω Resistor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"1000µF Capacitor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Capacitors_7189597832.jpg/200px-Capacitors_7189597832.jpg"},
+      {name:"5V 2A Power Supply",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Capacitors_7189597832.jpg/200px-Capacitors_7189597832.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:3,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Power the strip separately",detail:"NeoPixels draw a lot of current. Connect 5V power supply directly to strip VCC and GND — not from Arduino 5V."},
-      {num:2,title:"Data wire with resistor",detail:"470Ω resistor in series between Arduino Pin 6 and the strip DATA-IN pin. Protects against voltage spikes."},
-      {num:3,title:"Capacitor across power",detail:"1000µF cap across VCC and GND at the start of the strip. Prevents power surges on startup."},
-      {num:4,title:"Common ground",detail:"Connect Arduino GND to the strip GND. Install FastLED library."},
+      {num:1,title:"Power the NeoPixel strip from a separate 5V supply",detail:"NeoPixels can draw up to 60mA per LED — a full strip of 8 LEDs at white could use 480mA, far more than the Arduino can safely provide. Connect the strip's <strong>5V</strong> wire directly to your <strong>5V 2A power supply positive</strong> and the strip's <strong>GND</strong> wire to the power supply's <strong>negative</strong> — never power a large strip from the Arduino 5V pin."},
+      {num:2,title:"Data wire through a 470Ω resistor — Pin 6 to DATA-IN",detail:"Insert a <strong>470Ω resistor</strong> in series between Arduino <strong>Pin 6</strong> and the strip's <strong>DATA-IN</strong> wire using a <strong>male-to-male jumper wire</strong>. This resistor dampens voltage spikes on the data line that could corrupt the first LED or permanently damage it."},
+      {num:3,title:"1000µF capacitor across the strip power rails",detail:"Place the <strong>1000µF electrolytic capacitor</strong> across the strip's <strong>VCC</strong> and <strong>GND</strong> pads at the very beginning of the strip — positive leg (longer) to VCC. This absorbs the sudden current surge when the power first turns on and protects the first LED from the inrush."},
+      {num:4,title:"Common ground — Arduino GND to power supply GND — male-to-male",detail:"Connect Arduino <strong>GND</strong> to the power supply <strong>GND</strong> (and strip GND) using a <strong>male-to-male jumper wire</strong>. This is critical — both the Arduino and the strip must share the same ground reference or the data signal will not be read correctly. Before uploading, install the <strong>FastLED library</strong>: go to <strong>Tools → Manage Libraries</strong>, search for <strong>FastLED</strong> and click Install."},
     ],
     code:`#include <FastLED.h>
 #define NUM 8
@@ -4440,11 +4528,16 @@ void loop(){
   {
     id:"relay-switch", title:"Relay — Control AC Devices", desc:"Use an Arduino to switch a 5V relay module that controls appliances.",
     time:"20 min", diff:"intermediate", locked:true, color:"#C62E2E", icon:"⚡", tags:["intermediate"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"5V Relay Module",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:3}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"5V Relay Module",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Relay_of_the_electricity_board.jpg/200px-Relay_of_the_electricity_board.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:3,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Relay module — 3 control pins",detail:"VCC to Arduino 5V, GND to GND, IN to Pin 7."},
-      {num:2,title:"Load wiring (mains)",detail:"Be careful with mains voltage. Connect AC device through the relay COM and NO (Normally Open) terminals. LOW signal triggers most modules."},
-      {num:3,title:"Test with low voltage first",detail:"Use an LED or DC fan to verify switching logic before connecting mains."},
+      {num:1,title:"Connect the 3 relay control pins — male-to-male",detail:"The relay module has a low-voltage control side with 3 pins: <strong>VCC</strong>, <strong>GND</strong>, and <strong>IN</strong>. Connect <strong>VCC</strong> to Arduino <strong>5V</strong>, <strong>GND</strong> to Arduino <strong>GND</strong>, and <strong>IN</strong> to Arduino <strong>Pin 7</strong> using <strong>male-to-male jumper wires</strong>. When Pin 7 goes LOW, the relay coil energises and closes the switch — most relay modules are active-LOW, meaning LOW = ON."},
+      {num:2,title:"Connect your load through the relay output terminals",detail:"The relay has three high-voltage output terminals: <strong>COM</strong> (common), <strong>NO</strong> (Normally Open), and <strong>NC</strong> (Normally Closed). For a device you want switched ON by the Arduino, wire it through <strong>COM</strong> and <strong>NO</strong> — when the relay triggers, COM connects to NO and power flows to the device. Always test with a low-voltage load like an LED or DC fan first before wiring any mains-powered appliance."},
+      {num:3,title:"Safety note — test with low voltage first",detail:"Before connecting any AC mains device, verify your wiring works by using a simple <strong>LED with a 220Ω resistor</strong> or a <strong>small DC fan</strong> as the load. Upload the sketch and confirm the relay clicks on and off every 2 seconds. Only once you are confident the logic is correct should you connect higher-voltage devices — and always follow local electrical safety regulations."},
     ],
     code:`void setup(){pinMode(7,OUTPUT); digitalWrite(7,HIGH);}
 void loop(){
@@ -4455,11 +4548,18 @@ void loop(){
   {
     id:"hc05-bluetooth", title:"HC-05 Bluetooth Serial", desc:"Send commands from your phone to Arduino over Bluetooth.",
     time:"25 min", diff:"intermediate", locked:true, color:"#4A7BA7", icon:"📱", tags:["intermediate","wireless"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"HC-05 Bluetooth Module",qty:1},{name:"1kΩ Resistor",qty:1},{name:"2kΩ Resistor",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:4}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"HC-05 Bluetooth Module",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Arduino_Uno_-_R3.jpg/200px-Arduino_Uno_-_R3.jpg"},
+      {name:"1kΩ Resistor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"2kΩ Resistor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:4,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"HC-05 pins: VCC, GND, TXD, RXD",detail:"VCC to 5V. GND to GND. TXD to Arduino Pin 10. RXD to voltage divider then Pin 11."},
-      {num:2,title:"Voltage divider on RXD",detail:"HC-05 RXD is 3.3V logic. Put 1kΩ between Pin 11 and RXD, and 2kΩ from RXD to GND. Drops 5V to about 3.3V."},
-      {num:3,title:"Pair from phone",detail:"Default code: 1234. Use a Bluetooth terminal app (Android: Serial Bluetooth Terminal). Send 1 to turn LED on, 0 to turn off."},
+      {num:1,title:"Connect HC-05 VCC, GND, and TXD — male-to-male",detail:"Connect HC-05 <strong>VCC</strong> to Arduino <strong>5V</strong> and HC-05 <strong>GND</strong> to Arduino <strong>GND</strong> using <strong>male-to-male jumper wires</strong>. Then connect HC-05 <strong>TXD</strong> (transmit) to Arduino <strong>Pin 10</strong> — this is safe because the HC-05 is sending data TO the Arduino, and the Arduino Pin 10 is an input, so the 3.3V TX signal is fine for it to read."},
+      {num:2,title:"Voltage divider on HC-05 RXD — protects the 3.3V module",detail:"The HC-05 <strong>RXD</strong> (receive) pin is <strong>3.3V logic</strong> — sending 5V from the Arduino directly into it can damage the module over time. Build a voltage divider: connect a <strong>1kΩ resistor</strong> between Arduino <strong>Pin 11</strong> and HC-05 <strong>RXD</strong>, and a <strong>2kΩ resistor</strong> from HC-05 <strong>RXD</strong> to <strong>GND</strong>. This drops the 5V Arduino signal down to a safe ~3.3V."},
+      {num:3,title:"Pair from your phone and send commands",detail:"Upload the sketch, then on your phone go to <strong>Bluetooth settings</strong> and pair with the device named <strong>HC-05</strong> (default PIN is <strong>1234</strong>). Install a Bluetooth terminal app (on Android: <strong>Serial Bluetooth Terminal</strong>), connect to HC-05, and type <strong>1</strong> to turn the built-in LED on and <strong>0</strong> to turn it off."},
     ],
     code:`#include <SoftwareSerial.h>
 SoftwareSerial bt(10,11);
@@ -4478,11 +4578,16 @@ void loop(){
   {
     id:"rotary-encoder", title:"Rotary Encoder Menu", desc:"Use a rotary encoder to scroll through menu items on the Serial Monitor.",
     time:"20 min", diff:"intermediate", locked:true, color:"#6B766F", icon:"🔄", tags:["intermediate"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"Rotary Encoder (KY-040)",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:5}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"Rotary Encoder (KY-040)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Quadrature_Encoder_Back.jpg/200px-Quadrature_Encoder_Back.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:5,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Encoder has 5 pins",detail:"CLK, DT, SW, + (VCC), GND. Insert into holes 14e to 18e."},
-      {num:2,title:"Wiring",detail:"GND to GND. VCC to 5V. CLK to Pin 2. DT to Pin 3. SW to Pin 4."},
-      {num:3,title:"Turn and click",detail:"Clockwise = menu up, counter-clockwise = menu down, press = select."},
+      {num:1,title:"Insert the rotary encoder into the breadboard",detail:"The KY-040 rotary encoder module has <strong>5 pins</strong>: <strong>CLK</strong> (clock), <strong>DT</strong> (data), <strong>SW</strong> (button), <strong>+</strong> (VCC), and <strong>GND</strong>. Insert them into holes <strong>14e through 18e</strong>. Unlike a potentiometer that gives a fixed range, a rotary encoder counts steps in either direction indefinitely — perfect for scrolling through menus."},
+      {num:2,title:"Connect all 5 pins — male-to-male",detail:"Connect <strong>GND</strong> to Arduino <strong>GND</strong> (hole 18c), <strong>+</strong> to Arduino <strong>5V</strong> (hole 17c), <strong>CLK</strong> to Arduino <strong>Pin 2</strong> (hole 14c), <strong>DT</strong> to Arduino <strong>Pin 3</strong> (hole 15c), and <strong>SW</strong> to Arduino <strong>Pin 4</strong> (hole 16c) using <strong>male-to-male jumper wires</strong>. The CLK and DT pins work together — by comparing which one changes first, the Arduino knows which direction you are turning."},
+      {num:3,title:"Turn the knob and press to select",detail:"Upload the sketch and open <strong>Tools → Serial Monitor</strong> at 9600 baud. Turn the knob <strong>clockwise</strong> to move down the menu, <strong>counter-clockwise</strong> to move up, and <strong>press</strong> the knob like a button to select the current item. The current menu item name prints in the Serial Monitor each time it changes."},
     ],
     code:`int clk=2,dt=3,sw=4,pos=0,last;
 const char* items[]={"Settings","WiFi","Display","About"};
@@ -4504,11 +4609,17 @@ void loop(){
   {
     id:"soil-moisture", title:"Plant Watering Alert", desc:"Read soil moisture and sound a buzzer when the plant needs water.",
     time:"15 min", diff:"intermediate", locked:true, color:"#2D5D3F", icon:"🌱", tags:["intermediate","sensor"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"Soil Moisture Sensor",qty:1},{name:"Piezo Buzzer",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:4}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"Soil Moisture Sensor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DHT11_Humidity_%26_Temperature_Sensor.jpg/200px-DHT11_Humidity_%26_Temperature_Sensor.jpg"},
+      {name:"Piezo Buzzer",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/6/64/Piezo_Buzzer.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:4,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Moisture sensor wiring",detail:"Sensor VCC to 5V. GND to GND. AO (analog out) to A0. Dry soil gives high reading (900+). Wet soil gives low reading (300-)."},
-      {num:2,title:"Piezo buzzer on Pin 8",detail:"Positive to hole 20e. Pin 8 to 20a. GND to 21a."},
-      {num:3,title:"Push probe into soil",detail:"Upload sketch. Buzzer alerts when soil is too dry."},
+      {num:1,title:"Connect the soil moisture sensor — male-to-male",detail:"The sensor module has 4 pins: <strong>VCC</strong>, <strong>GND</strong>, <strong>DO</strong> (digital out), and <strong>AO</strong> (analog out). Connect <strong>VCC</strong> to Arduino <strong>5V</strong>, <strong>GND</strong> to Arduino <strong>GND</strong>, and <strong>AO</strong> to Arduino <strong>A0</strong> using <strong>male-to-male jumper wires</strong>. The analog output gives a reading from about <strong>300</strong> (very wet soil) to <strong>900+</strong> (very dry soil) — the wetter the soil, the lower the number."},
+      {num:2,title:"Wire the piezo buzzer on Pin 8 — male-to-male",detail:"Insert the buzzer with the <strong>positive leg in hole 20e</strong> and the negative leg in hole <strong>21e</strong>. Connect Arduino <strong>Pin 8</strong> to hole <strong>20a</strong> and Arduino <strong>GND</strong> to hole <strong>21a</strong> using <strong>male-to-male jumper wires</strong>. The buzzer will sound a short alert beep every time the soil reads too dry — reminding you to water your plant."},
+      {num:3,title:"Push the probe into soil and test",detail:"Upload the sketch using the <strong>Upload button (→)</strong>, then push the two metal probes of the sensor into the soil of a plant pot. Open <strong>Tools → Serial Monitor</strong> at 9600 baud to watch the moisture reading live. When the value rises above 700 (dry soil), the buzzer beeps once per second until the plant is watered."},
     ],
     code:`void setup(){Serial.begin(9600); pinMode(8,OUTPUT);}
 void loop(){
@@ -4523,11 +4634,18 @@ void loop(){
   {
     id:"rain-sensor", title:"Rain Detector", desc:"Detect rainfall and display wet/dry status on Serial Monitor.",
     time:"12 min", diff:"intermediate", locked:true, color:"#4A7BA7", icon:"🌧️", tags:["intermediate","sensor"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"Rain Sensor Module",qty:1},{name:"LED",qty:1},{name:"220Ω Resistor",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:4}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"Rain Sensor Module",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DHT11_Humidity_%26_Temperature_Sensor.jpg/200px-DHT11_Humidity_%26_Temperature_Sensor.jpg"},
+      {name:"LED (any color)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/f/f2/LG_Red_LED.jpg"},
+      {name:"220Ω Resistor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:4,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"Rain sensor connections",detail:"VCC to 5V. GND to GND. DO (digital out) to Pin 2. AO to A0."},
-      {num:2,title:"LED indicator",detail:"LED anode to hole 14e, cathode to 15e. Resistor 15a to 20a. Pin 13 to 14a. GND to 20c."},
-      {num:3,title:"Test it",detail:"Drip water on the sensor pad — LED lights and Serial Monitor shows WET."},
+      {num:1,title:"Connect the rain sensor module — male-to-male",detail:"The rain sensor module has 4 pins: <strong>VCC</strong>, <strong>GND</strong>, <strong>DO</strong> (digital out), and <strong>AO</strong> (analog out). Connect <strong>VCC</strong> to Arduino <strong>5V</strong>, <strong>GND</strong> to Arduino <strong>GND</strong>, and <strong>DO</strong> to Arduino <strong>Pin 2</strong> using <strong>male-to-male jumper wires</strong>. When the sensing pad gets wet, the electrical resistance between its tracks drops, and <strong>DO</strong> goes LOW — the Arduino reads this as rain detected."},
+      {num:2,title:"LED indicator — Pin 13 through 220Ω resistor — male-to-male",detail:"Insert the LED with the <strong>long leg (anode) in hole 14e</strong> and short leg (cathode) in hole <strong>15e</strong>. Add the <strong>220Ω resistor</strong> from hole <strong>15a to hole 20a</strong>. Connect Arduino <strong>Pin 13</strong> to hole <strong>14a</strong> and Arduino <strong>GND</strong> to hole <strong>20c</strong> using <strong>male-to-male jumper wires</strong>. The LED will light up as a visual rain warning whenever the sensor detects moisture."},
+      {num:3,title:"Test by dripping water on the sensor pad",detail:"Upload the sketch and open <strong>Tools → Serial Monitor</strong> at 9600 baud. Drip a few drops of water onto the sensor's metal pad — the LED should light up and the Serial Monitor should print <strong>WET</strong>. Dry the pad with a paper towel and it should return to <strong>DRY</strong>."},
     ],
     code:`void setup(){pinMode(2,INPUT); pinMode(13,OUTPUT); Serial.begin(9600);}
 void loop(){
@@ -4540,10 +4658,15 @@ void loop(){
   {
     id:"matrix-8x8", title:"8x8 LED Matrix", desc:"Drive an 8x8 LED matrix with a MAX7219 to display patterns and scrolling text.",
     time:"30 min", diff:"intermediate", locked:true, color:"#C62E2E", icon:"⬛", tags:["intermediate","display"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"8x8 LED Matrix with MAX7219",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:5}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"8x8 LED Matrix with MAX7219",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/7_segment_display_labeled.svg/200px-7_segment_display_labeled.svg.png"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:5,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"5 wires to MAX7219 module",detail:"VCC to 5V. GND to GND. DIN to Pin 11. CLK to Pin 13. CS to Pin 10."},
-      {num:2,title:"Install LedControl library",detail:"Library Manager, search LedControl, Install."},
+      {num:1,title:"Connect the 5 wires to the MAX7219 module — male-to-male",detail:"The MAX7219 module (with the 8x8 matrix already attached) has 5 input pins: <strong>VCC</strong> to Arduino <strong>5V</strong>, <strong>GND</strong> to Arduino <strong>GND</strong>, <strong>DIN</strong> (data in) to Arduino <strong>Pin 11</strong>, <strong>CLK</strong> (clock) to Arduino <strong>Pin 13</strong>, and <strong>CS</strong> (chip select) to Arduino <strong>Pin 10</strong> using <strong>male-to-male jumper wires</strong>. The MAX7219 chip does all the hard work of controlling 64 individual LEDs over just these 3 data wires."},
+      {num:2,title:"Install the LedControl library",detail:"Before uploading, install the display library: in the Arduino IDE go to <strong>Tools → Manage Libraries</strong>, search for <strong>LedControl</strong> and click Install. This library lets you control the matrix with simple commands like setRow() and setColumn() instead of manually managing all 64 LED pins."},
     ],
     code:`#include <LedControl.h>
 LedControl lc(11,13,10,1);
@@ -4560,12 +4683,20 @@ void loop(){
   {
     id:"pid-balance", title:"Self-Balancing Robot (PID)", desc:"Build a two-wheeled robot that balances upright using a PID control loop.",
     time:"90 min", diff:"advanced", locked:true, color:"#C62E2E", icon:"🤖", tags:["advanced","motor"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"MPU-6050 Gyro/Accel",qty:1},{name:"L298N Motor Driver",qty:1},{name:"DC Gear Motors (6V)",qty:2},{name:"18650 Battery Pack (7.4V)",qty:1},{name:"3D-Printed Frame",qty:1},{name:"Jumper Wires",qty:12}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"MPU-6050 Gyro/Accel",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DHT11_Humidity_%26_Temperature_Sensor.jpg/200px-DHT11_Humidity_%26_Temperature_Sensor.jpg"},
+      {name:"L298N Motor Driver",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"DC Gear Motors (6V)",qty:2,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Resistor.jpg/200px-Resistor.jpg"},
+      {name:"18650 Battery Pack (7.4V)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Capacitors_7189597832.jpg/200px-Capacitors_7189597832.jpg"},
+      {name:"3D-Printed Frame",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DHT11_Humidity_%26_Temperature_Sensor.jpg/200px-DHT11_Humidity_%26_Temperature_Sensor.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:12,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"MPU-6050 (I2C)",detail:"VCC to 3.3V. GND to GND. SDA to A4. SCL to A5. INT to Pin 2."},
-      {num:2,title:"L298N motor driver",detail:"ENA to Pin 5 (PWM). IN1 to Pin 7. IN2 to Pin 8. ENB to Pin 6. IN3 to Pin 9. IN4 to Pin 10."},
-      {num:3,title:"Power",detail:"Battery to L298N 12V input. L298N 5V out to Arduino Vin. Common GND everywhere."},
-      {num:4,title:"Tune PID constants",detail:"Upload sketch, hold robot vertical. Adjust Kp, Ki, Kd until it balances. Start with Kp=20, Ki=0, Kd=0.8."},
+      {num:1,title:"MPU-6050 gyro/accelerometer — I2C connection — male-to-male",detail:"Connect MPU-6050 <strong>VCC</strong> to Arduino <strong>3.3V</strong> (not 5V — the MPU-6050 is a 3.3V device), <strong>GND</strong> to Arduino <strong>GND</strong>, <strong>SDA</strong> to Arduino <strong>A4</strong>, <strong>SCL</strong> to Arduino <strong>A5</strong>, and <strong>INT</strong> to Arduino <strong>Pin 2</strong> using <strong>male-to-male jumper wires</strong>. The MPU-6050 measures the tilt angle of the robot so the Arduino knows which way to drive the motors to stay balanced."},
+      {num:2,title:"L298N motor driver — 6 control wires — male-to-male",detail:"Connect <strong>ENA</strong> to Arduino <strong>Pin 5</strong> (PWM, controls left motor speed), <strong>IN1</strong> to <strong>Pin 7</strong>, <strong>IN2</strong> to <strong>Pin 8</strong> (left motor direction), <strong>ENB</strong> to <strong>Pin 6</strong> (PWM, controls right motor speed), <strong>IN3</strong> to <strong>Pin 9</strong>, <strong>IN4</strong> to <strong>Pin 10</strong> (right motor direction) using <strong>male-to-male jumper wires</strong>. The PID loop calculates a power output and applies it through these pins to correct the robot's tilt."},
+      {num:3,title:"Battery pack powers everything through the L298N",detail:"Connect the <strong>7.4V battery pack</strong> positive to L298N <strong>12V input</strong> and negative to L298N <strong>GND</strong>. Connect the L298N's built-in <strong>5V output</strong> to Arduino <strong>Vin</strong> to power the Arduino from the same battery. Connect all GNDs together — L298N, Arduino, and MPU-6050 must all share the same common ground."},
+      {num:4,title:"Upload and tune the PID constants",detail:"Upload the sketch below using the <strong>Upload button (→)</strong> in the Arduino IDE. Hold the robot upright and it should try to balance. If it falls over or oscillates wildly, adjust the constants in the code: start by increasing <strong>Kp</strong> until the robot tries to correct, then add small amounts of <strong>Kd</strong> to stop overshoot. Only add <strong>Ki</strong> last and keep it very small."},
     ],
     code:`#include <MPU6050_light.h>
 #include <Wire.h>
@@ -4586,11 +4717,16 @@ void loop(){
   {
     id:"gps-tracker", title:"GPS Location Tracker", desc:"Read GPS coordinates from a NEO-6M module and log to Serial.",
     time:"35 min", diff:"advanced", locked:true, color:"#4A7BA7", icon:"🛰️", tags:["advanced","wireless","sensor"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"NEO-6M GPS Module",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:4}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"NEO-6M GPS Module",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DHT11_Humidity_%26_Temperature_Sensor.jpg/200px-DHT11_Humidity_%26_Temperature_Sensor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:4,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"NEO-6M wiring",detail:"VCC to 5V. GND to GND. TX to Arduino Pin 4. RX to Arduino Pin 3."},
-      {num:2,title:"Use SoftwareSerial",detail:"GPS runs at 9600 baud on its own UART. SoftwareSerial on pins 3/4 frees up the USB serial port for debugging."},
-      {num:3,title:"Get a GPS fix",detail:"Take the module outside or near a window. Cold start takes 1 to 5 minutes. Once locked, coordinates update every second."},
+      {num:1,title:"Connect the NEO-6M GPS module — male-to-male",detail:"Connect NEO-6M <strong>VCC</strong> to Arduino <strong>5V</strong>, <strong>GND</strong> to Arduino <strong>GND</strong>, <strong>TX</strong> (module transmit) to Arduino <strong>Pin 4</strong>, and <strong>RX</strong> (module receive) to Arduino <strong>Pin 3</strong> using <strong>male-to-male jumper wires</strong>. The GPS module constantly streams location data as NMEA sentences — the Arduino reads and decodes this stream to extract your exact coordinates."},
+      {num:2,title:"Why we use SoftwareSerial on Pins 3 and 4",detail:"The Arduino Uno only has one hardware serial port and it is used by the USB connection to your computer. Using <strong>SoftwareSerial</strong> on <strong>Pins 3 and 4</strong> creates a second software serial port just for the GPS, so you can read GPS data AND still see debug messages in the Serial Monitor at the same time without conflicts."},
+      {num:3,title:"Get outside for a GPS fix",detail:"After uploading, take the module to a window or outside — GPS signals cannot pass through thick walls. The first time it connects (called a <strong>cold start</strong>) can take <strong>1–5 minutes</strong> while it downloads satellite data. Once it has a fix, latitude and longitude will print to the Serial Monitor every second. The tiny ceramic antenna on the module must face upward toward the sky."},
     ],
     code:`#include <SoftwareSerial.h>
 #include <TinyGPS++.h>
@@ -4608,11 +4744,17 @@ void loop(){
   {
     id:"rfid", title:"RFID Card Reader", desc:"Read RFID card UIDs and grant or deny access based on a whitelist.",
     time:"30 min", diff:"advanced", locked:true, color:"#6B766F", icon:"🪪", tags:["advanced"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"RC522 RFID Module",qty:1},{name:"RFID Cards/Tags",qty:2},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:7}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"RC522 RFID Module",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DHT11_Humidity_%26_Temperature_Sensor.jpg/200px-DHT11_Humidity_%26_Temperature_Sensor.jpg"},
+      {name:"RFID Cards/Tags",qty:2,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DHT11_Humidity_%26_Temperature_Sensor.jpg/200px-DHT11_Humidity_%26_Temperature_Sensor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:7,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"RC522 SPI wiring (3.3V only!)",detail:"VCC to 3.3V (NOT 5V). GND to GND. RST to Pin 9. SDA to Pin 10. MOSI to Pin 11. MISO to Pin 12. SCK to Pin 13."},
-      {num:2,title:"Install MFRC522 library",detail:"Library Manager, search MFRC522 by GithubCommunity, Install."},
-      {num:3,title:"Scan a card",detail:"Serial Monitor shows the card UID. Copy it into the allowed array in the sketch to whitelist it."},
+      {num:1,title:"RC522 SPI wiring — 3.3V ONLY — male-to-male",detail:"The RC522 runs on <strong>3.3V only</strong> — connecting it to 5V will permanently destroy the chip. Connect: <strong>VCC</strong> to Arduino <strong>3.3V</strong>, <strong>GND</strong> to Arduino <strong>GND</strong>, <strong>RST</strong> to Arduino <strong>Pin 9</strong>, <strong>SDA</strong> to Arduino <strong>Pin 10</strong>, <strong>MOSI</strong> to Arduino <strong>Pin 11</strong>, <strong>MISO</strong> to Arduino <strong>Pin 12</strong>, and <strong>SCK</strong> to Arduino <strong>Pin 13</strong> using <strong>male-to-male jumper wires</strong>. Pins 11–13 are the Arduino's hardware SPI bus which is shared with other SPI devices."},
+      {num:2,title:"Install the MFRC522 library",detail:"Before uploading, install the RFID library: in the Arduino IDE go to <strong>Tools → Manage Libraries</strong>, search for <strong>MFRC522</strong> by GithubCommunity and click Install. This library handles all the complex radio communication between the Arduino and the RFID cards so you just get back the card's unique ID number."},
+      {num:3,title:"Scan a card to find its UID, then add it to the whitelist",detail:"Upload the sketch and open <strong>Tools → Serial Monitor</strong> at 9600 baud. Tap any RFID card or key fob near the reader — it will print <strong>ACCESS DENIED</strong> and show the card's UID. Copy that UID into the <strong>allowed[]</strong> array in the sketch, re-upload, and that card will now print <strong>ACCESS GRANTED</strong>."},
     ],
     code:`#include <MFRC522.h>
 #include <SPI.h>
@@ -4630,11 +4772,17 @@ void loop(){
   {
     id:"esp32-webserver", title:"ESP32 Web Server", desc:"Host a simple webpage on your local WiFi that controls an LED.",
     time:"40 min", diff:"advanced", locked:true, color:"#4A7BA7", icon:"🌐", tags:["advanced","wireless"],
-    parts:[{name:"ESP32 DevKit",qty:1},{name:"LED",qty:1},{name:"220Ω Resistor",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:2}],
+    parts:[
+      {name:"ESP32 DevKit",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ESP32_Espressif_ESP-WROOM-32_Dev_Board.jpg/320px-ESP32_Espressif_ESP-WROOM-32_Dev_Board.jpg"},
+      {name:"LED (any color)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/f/f2/LG_Red_LED.jpg"},
+      {name:"220Ω Resistor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:2,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"LED on GPIO 2",detail:"LED anode to hole 14e, cathode to 15e. Resistor 15a to 20a. Wire: GPIO 2 to 14a. GND to 20c."},
-      {num:2,title:"Enter WiFi credentials in sketch",detail:"Replace SSID and password. Upload — Serial Monitor prints the IP address."},
-      {num:3,title:"Open browser on same WiFi",detail:"Navigate to the printed IP. Click ON/OFF to control the LED from any device on your network."},
+      {num:1,title:"LED on GPIO 2 with 220Ω resistor — male-to-male",detail:"Insert the LED with the <strong>long leg (anode) in hole 14e</strong> and short leg (cathode) in hole <strong>15e</strong>. Add the <strong>220Ω resistor</strong> from hole <strong>15a to hole 20a</strong>. Connect ESP32 <strong>GPIO 2</strong> to hole <strong>14a</strong> and ESP32 <strong>GND</strong> to hole <strong>20c</strong> using <strong>male-to-male jumper wires</strong>. GPIO 2 also controls the ESP32's built-in LED so you will see both the onboard and external LED respond."},
+      {num:2,title:"Enter your WiFi credentials in the sketch before uploading",detail:"Open the sketch and replace <strong>YOUR_WIFI</strong> with your WiFi network name (SSID) and <strong>YOUR_PASS</strong> with your WiFi password. Upload the sketch using the <strong>Upload button (→)</strong>, then open <strong>Tools → Serial Monitor</strong> at 115200 baud — the ESP32 will connect to your WiFi and print its <strong>IP address</strong> (something like 192.168.1.42)."},
+      {num:3,title:"Open any browser on the same WiFi network",detail:"On any phone, tablet, or computer connected to the same WiFi, open a browser and type the IP address printed in the Serial Monitor. A simple webpage will load with <strong>ON</strong> and <strong>OFF</strong> links — click them to control the LED remotely from anywhere on your network."},
     ],
     code:`#include <WiFi.h>
 #include <WebServer.h>
@@ -4654,11 +4802,18 @@ void loop(){server.handleClient();}`,
   {
     id:"robotic-arm", title:"3-DOF Robotic Arm", desc:"Control a 3-joint servo arm with potentiometers for real-time analog control.",
     time:"60 min", diff:"advanced", locked:true, color:"#B8935A", icon:"🦾", tags:["advanced","servo"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"SG90 or MG996R Servos",qty:3},{name:"10kΩ Potentiometers",qty:3},{name:"Breadboard",qty:1},{name:"5V 3A External Power",qty:1},{name:"Jumper Wires",qty:10}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"SG90 or MG996R Servos",qty:3,photo:"https://upload.wikimedia.org/wikipedia/commons/6/6e/SG90_servo.jpg"},
+      {name:"10kΩ Potentiometers",qty:3,photo:"https://upload.wikimedia.org/wikipedia/commons/b/b5/Potentiometer.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"5V 3A External Power",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Capacitors_7189597832.jpg/200px-Capacitors_7189597832.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:10,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"3 potentiometers for control",detail:"Pot 1 wiper to A0, Pot 2 to A1, Pot 3 to A2. All outer pins to 5V and GND."},
-      {num:2,title:"3 servos",detail:"Servo 1 signal to Pin 9. Servo 2 to Pin 10. Servo 3 to Pin 11."},
-      {num:3,title:"Power servos externally",detail:"Large servos draw too much current for Arduino 5V. Use external 5V supply — connect GND to Arduino GND."},
+      {num:1,title:"3 potentiometers — wiper pins to A0, A1, A2 — male-to-male",detail:"Each potentiometer has 3 pins — connect the <strong>left outer pin to 5V</strong>, the <strong>right outer pin to GND</strong>, and the <strong>middle wiper pin</strong> to an analog input: Pot 1 wiper → Arduino <strong>A0</strong>, Pot 2 wiper → Arduino <strong>A1</strong>, Pot 3 wiper → Arduino <strong>A2</strong> using <strong>male-to-male jumper wires</strong>. Turning each knob changes the voltage on its analog pin from 0V to 5V, which the sketch maps to a servo angle from 0° to 180°."},
+      {num:2,title:"3 servo signal wires — Pins 9, 10, 11 — male-to-male",detail:"Connect Servo 1 <strong>signal wire (orange/yellow)</strong> to Arduino <strong>Pin 9</strong>, Servo 2 signal to <strong>Pin 10</strong>, and Servo 3 signal to <strong>Pin 11</strong> using <strong>male-to-male jumper wires</strong>. Pins 9, 10, and 11 are all PWM-capable (marked with ~) which is required for servo control."},
+      {num:3,title:"Power servos from external 5V supply — not from Arduino",detail:"Connect all three servo <strong>red (power) wires</strong> to the external <strong>5V 3A power supply positive</strong> and all three servo <strong>brown/black (ground) wires</strong> to the power supply <strong>negative</strong>. Also connect the power supply <strong>GND</strong> to Arduino <strong>GND</strong> with a <strong>male-to-male jumper wire</strong> — this is called a common ground and is essential for the signal wires to work correctly."},
     ],
     code:`#include <Servo.h>
 Servo s1,s2,s3;
@@ -4673,11 +4828,19 @@ void loop(){
   {
     id:"datalogger", title:"SD Card Data Logger", desc:"Log sensor readings to a CSV file on a microSD card with timestamps.",
     time:"35 min", diff:"advanced", locked:true, color:"#6B766F", icon:"💾", tags:["advanced"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"microSD Card Module",qty:1},{name:"microSD Card (FAT32)",qty:1},{name:"DS3231 RTC Module",qty:1},{name:"TMP36 Sensor",qty:1},{name:"Breadboard",qty:1},{name:"Jumper Wires",qty:10}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"microSD Card Module",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DHT11_Humidity_%26_Temperature_Sensor.jpg/200px-DHT11_Humidity_%26_Temperature_Sensor.jpg"},
+      {name:"microSD Card (FAT32)",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DHT11_Humidity_%26_Temperature_Sensor.jpg/200px-DHT11_Humidity_%26_Temperature_Sensor.jpg"},
+      {name:"DS3231 RTC Module",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DHT11_Humidity_%26_Temperature_Sensor.jpg/200px-DHT11_Humidity_%26_Temperature_Sensor.jpg"},
+      {name:"TMP36 Sensor",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Resistor.jpg/200px-Resistor.jpg"},
+      {name:"Breadboard",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/7/73/400_points_breadboard.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:10,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"SD module (SPI)",detail:"CS to Pin 10. MOSI to Pin 11. MISO to Pin 12. SCK to Pin 13. VCC to 5V. GND to GND."},
-      {num:2,title:"DS3231 RTC (I2C)",detail:"SDA to A4. SCL to A5. VCC to 3.3V. GND to GND."},
-      {num:3,title:"TMP36 on A0",detail:"Reads temperature every 10 seconds. Logs to LOG.CSV as: timestamp, temperature."},
+      {num:1,title:"microSD card module — SPI connection — male-to-male",detail:"Connect the SD module using the SPI bus: <strong>CS</strong> to Arduino <strong>Pin 10</strong>, <strong>MOSI</strong> to Arduino <strong>Pin 11</strong>, <strong>MISO</strong> to Arduino <strong>Pin 12</strong>, <strong>SCK</strong> to Arduino <strong>Pin 13</strong>, <strong>VCC</strong> to Arduino <strong>5V</strong>, and <strong>GND</strong> to Arduino <strong>GND</strong> using <strong>male-to-male jumper wires</strong>. Before inserting the card, format it as <strong>FAT32</strong> on your computer — the Arduino SD library only supports FAT32."},
+      {num:2,title:"DS3231 real-time clock — I2C connection — male-to-male",detail:"Connect DS3231 <strong>SDA</strong> to Arduino <strong>A4</strong>, <strong>SCL</strong> to Arduino <strong>A5</strong>, <strong>VCC</strong> to Arduino <strong>3.3V</strong> (the DS3231 is a 3.3V module), and <strong>GND</strong> to Arduino <strong>GND</strong> using <strong>male-to-male jumper wires</strong>. The DS3231 keeps accurate time even when the Arduino is powered off (thanks to its coin cell battery), so every log entry gets a real timestamp."},
+      {num:3,title:"TMP36 temperature sensor on A0 — male-to-male",detail:"Connect TMP36 <strong>VCC</strong> (left pin, flat face toward you) to Arduino <strong>5V</strong>, <strong>Signal</strong> (middle pin) to Arduino <strong>A0</strong>, and <strong>GND</strong> (right pin) to Arduino <strong>GND</strong> using <strong>male-to-male jumper wires</strong>. The sketch reads temperature every 10 seconds and writes a new line to <strong>LOG.CSV</strong> on the SD card in the format: <em>datetime, temperatureC</em>. Remove the card and open the file in Excel or any spreadsheet app to see your data."},
     ],
     code:`#include <SD.h>
 #include <RTClib.h>
@@ -4700,11 +4863,19 @@ void loop(){
   {
     id:"line-follower", title:"Line-Following Robot", desc:"Build a robot that follows a black line on white paper using IR sensors.",
     time:"60 min", diff:"advanced", locked:true, color:"#1C2820", icon:"🏎️", tags:["advanced","motor","sensor"],
-    parts:[{name:"Arduino Uno R3",qty:1},{name:"L298N Motor Driver",qty:1},{name:"IR Line Sensors",qty:2},{name:"DC Gear Motors",qty:2},{name:"Wheels + Chassis",qty:1},{name:"9V Battery",qty:1},{name:"Jumper Wires",qty:10}],
+    parts:[
+      {name:"Arduino Uno R3",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg"},
+      {name:"L298N Motor Driver",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/e/e6/Resistor.jpg"},
+      {name:"IR Line Sensors",qty:2,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Photo_diode_1.JPG/200px-Photo_diode_1.JPG"},
+      {name:"DC Gear Motors",qty:2,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Resistor.jpg/200px-Resistor.jpg"},
+      {name:"Wheels + Chassis",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/DHT11_Humidity_%26_Temperature_Sensor.jpg/200px-DHT11_Humidity_%26_Temperature_Sensor.jpg"},
+      {name:"9V Battery",qty:1,photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Capacitors_7189597832.jpg/200px-Capacitors_7189597832.jpg"},
+      {name:"Male-to-Male Jumper Wires",qty:10,photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Jumper_wire.jpg"},
+    ],
     wiring:[
-      {num:1,title:"IR sensors",detail:"Left sensor OUT to Pin 2. Right sensor OUT to Pin 3. Both sensors VCC to 5V. GND to GND. Black line gives HIGH output."},
-      {num:2,title:"L298N motor driver",detail:"ENA to Pin 5. IN1 to Pin 7. IN2 to Pin 8. ENB to Pin 6. IN3 to Pin 9. IN4 to Pin 10."},
-      {num:3,title:"Power and test track",detail:"9V battery to L298N. L298N 5V out to Arduino Vin. Make a black line track with electrical tape on white paper."},
+      {num:1,title:"IR line sensors — OUT to Pins 2 and 3 — male-to-male",detail:"Each IR sensor module has 3 pins: <strong>VCC</strong>, <strong>GND</strong>, and <strong>OUT</strong> (digital output). Connect both sensor <strong>VCC</strong> pins to Arduino <strong>5V</strong> and both <strong>GND</strong> pins to Arduino <strong>GND</strong>. Connect the <strong>left sensor OUT</strong> to Arduino <strong>Pin 2</strong> and the <strong>right sensor OUT</strong> to Arduino <strong>Pin 3</strong> using <strong>male-to-male jumper wires</strong>. When the sensor is over a <strong>white surface</strong> it reflects IR light back and reads HIGH; over a <strong>black line</strong> the light is absorbed and it reads LOW."},
+      {num:2,title:"L298N motor driver — 6 control wires — male-to-male",detail:"Connect <strong>ENA</strong> to Arduino <strong>Pin 5</strong> (PWM speed control, left motor), <strong>IN1</strong> to <strong>Pin 7</strong>, <strong>IN2</strong> to <strong>Pin 8</strong> (left motor direction), <strong>ENB</strong> to Arduino <strong>Pin 6</strong> (PWM speed control, right motor), <strong>IN3</strong> to <strong>Pin 9</strong>, and <strong>IN4</strong> to <strong>Pin 10</strong> (right motor direction) using <strong>male-to-male jumper wires</strong>. The robot steers by speeding up one motor and slowing the other — so if it drifts left off the line, it speeds up the left motor to steer back right."},
+      {num:3,title:"Battery power through L298N and create your test track",detail:"Connect the <strong>9V battery</strong> positive to L298N <strong>12V input</strong> and negative to L298N <strong>GND</strong>. Connect the L298N's <strong>5V output</strong> to Arduino <strong>Vin</strong> to power the Arduino from the same battery — also connect all GNDs together. For the test track, lay <strong>black electrical tape</strong> in a loop on white cardboard or paper — make gentle curves, not sharp corners, so the robot has time to react."},
     ],
     code:`void setup(){
   pinMode(2,INPUT); pinMode(3,INPUT);
