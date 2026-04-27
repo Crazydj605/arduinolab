@@ -1779,6 +1779,10 @@
   #auth-modal.open { display: grid !important; }
   #user-menu.open { display: block !important; }
 
+  /* ===== LESSON COMPLETION ===== */
+  .lesson-done { outline: 2px solid var(--brand); outline-offset: -2px; }
+  .lesson-done .lesson-preview::after { content: ''; position:absolute;inset:0;background:rgba(45,93,63,0.06);pointer-events:none; }
+
   /* ===== DARK MODE ===== */
   [data-theme="dark"] {
     --bg: #151A17;
@@ -2034,20 +2038,30 @@ function updateNavUI() {
   const avatar    = document.getElementById('auth-avatar');
   const emailEl   = document.getElementById('user-menu-email');
   const proBadge  = document.getElementById('user-menu-pro-badge');
+  const isPro     = currentProfile?.is_pro === true;
 
   if (currentUser) {
     signedOut.style.cssText = 'display:none';
     signedIn.style.cssText  = 'display:flex;gap:10px;align-items:center;';
     const email = currentUser.email || currentUser.user_metadata?.email || '';
-    // Show first letter of email, or first+second if available
     const parts = email.split('@')[0];
     avatar.textContent = parts.slice(0, 2).toUpperCase();
     if (emailEl) emailEl.textContent = email;
-    if (proBadge) proBadge.style.display = currentProfile?.is_pro ? 'block' : 'none';
+    if (proBadge) proBadge.style.display = isPro ? 'block' : 'none';
   } else {
     signedOut.style.cssText = 'display:flex;gap:10px;align-items:center;';
     signedIn.style.cssText  = 'display:none;';
   }
+
+  // Hide upgrade banner and community lock for pro users
+  const banner = document.getElementById('upgrade-banner');
+  if (banner) banner.style.display = isPro ? 'none' : '';
+
+  const commLock = document.getElementById('community-lock-overlay');
+  if (commLock) commLock.style.display = isPro ? 'none' : '';
+
+  // Refresh lesson cards to show correct labels
+  renderLessons();
 }
 
 function unlockAllLessons(announce = true) {
@@ -2281,6 +2295,134 @@ window.addEventListener('load', () => {
     };
   }
 });
+
+// ===== COMMUNITY ==============================================
+
+const communityChannels = {
+  'project-help': {
+    title: '# project-help',
+    meta: 'Got stuck? Ask away. 12,400 members ready to help.',
+    posts: [
+      { initials:'SK', color:'a1', name:'Sarah K.',    time:'12m ago',  tag:'Servo',    title:'SG90 servo jitters at rest — how do I stop it?',                      content:'My servo won\'t sit still. It twitches every few seconds even when I\'m not sending commands. Separate 5V supply with common ground to the Arduino. Using Servo.attach(9) and write(90). Anyone dealt with this?',                                              replies:8,  votes:12, views:142 },
+      { initials:'MT', color:'a2', name:'Marcus T.',   time:'1h ago',   tag:'I2C',      title:'I2C OLED showing garbage after library update',                        content:'Had the SSD1306 OLED working perfectly for weeks. Updated the Adafruit library to latest and now text renders as random symbols. Rolled back — same issue. Wire.begin() is called, address 0x3C confirmed with scanner sketch.',                           replies:4,  votes:6,  views:89  },
+      { initials:'AL', color:'a3', name:'Ava L.',      time:'3h ago',   tag:'Solved',   title:'Stepper loses steps under load — SOLVED',                              content:'Posting this in case anyone else hits it. NEMA17 + A4988 was losing steps whenever the carriage hit resistance. Current limit was way too low. Adjusted Vref to 0.7V per the stepper\'s rated current and it\'s rock solid. Don\'t skip the math.',       replies:15, votes:48, views:520 },
+      { initials:'JR', color:'a4', name:'Jordan R.',   time:'5h ago',   tag:'ESP32',    title:'ESP32 brownout every time WiFi.begin() runs',                          content:'Building a weather station. ESP32 boots fine, Serial.println works, but the moment WiFi.begin() fires it resets with "Brownout detector triggered." Running off the USB cable that shipped with it — could that actually be the problem?',                 replies:11, votes:19, views:203 },
+      { initials:'PW', color:'a1', name:'Pete W.',     time:'7h ago',   tag:'Power',    title:'Arduino Uno keeps resetting when relay triggers',                      content:'Using a 5V relay module to switch a 12V pump. Every time the relay clicks on, the Arduino resets. I\'m using a separate 12V supply for the pump side. Could the relay coil itself be causing a voltage dip on the 5V line?',                              replies:6,  votes:9,  views:134 },
+      { initials:'NF', color:'a2', name:'Nadia F.',    time:'9h ago',   tag:'Serial',   title:'Serial monitor shows nothing — TX LED not blinking',                   content:'Brand new Uno clone. Upload says "Done uploading" but Serial Monitor is blank and the TX LED never blinks. Tried different baud rates, different cables, restarting IDE. The board runs the blink sketch fine though.',                                    replies:9,  votes:5,  views:177 },
+      { initials:'CB', color:'a3', name:'Chris B.',    time:'14h ago',  tag:'PWM',      title:'analogWrite() giving weird voltage steps, not smooth',                 content:'Trying to fade an LED on pin 11. analogWrite(11, 128) gives me around 2.4V which is correct but there\'s visible flickering even at 64MHz. Is the 490Hz PWM frequency just too low for some LEDs or am I missing something?',                           replies:3,  votes:7,  views:91  },
+      { initials:'RL', color:'a4', name:'Rosa L.',     time:'1d ago',   tag:'Solved',   title:'DHT22 always reads -999 — turns out it was the pull-up',               content:'Spent two days on this. DHT22 with no external pull-up, relying on the internal one via INPUT_PULLUP. That doesn\'t work for DHT sensors — they need a 10kΩ external pull-up to 3.3V or 5V. Added it and first read was perfect.',                          replies:22, votes:71, views:840 },
+      { initials:'TM', color:'a1', name:'Tom M.',      time:'1d ago',   tag:'Motor',    title:'L298N gets very hot after 30 seconds — is this normal?',               content:'Running two DC motors off an L298N. No load on the motors, just spinning free. After 30 seconds the chip is too hot to touch. I\'ve got the enable pins pulled high. Is this just how these modules run or do I have something wired wrong?',           replies:7,  votes:14, views:210 },
+      { initials:'YK', color:'a2', name:'Yuki K.',     time:'2d ago',   tag:'Libraries', title:'Which NeoPixel library actually works with 400+ LEDs?',               content:'Using FastLED on an Uno to drive a 500-LED WS2812B strip. Getting weird colour artifacts on LEDs past ~250. Tried Adafruit NeoPixel too — same issue. Is this a timing problem or a RAM issue? Uno only has 2KB.',                                     replies:18, votes:33, views:465 },
+    ]
+  },
+  'show-and-tell': {
+    title: '# show-and-tell',
+    meta: 'Share what you built. We want to see it.',
+    posts: [
+      { initials:'DK', color:'a2', name:'Dan K.',       time:'2h ago',   tag:'Build',    title:'Built a 3-axis CNC router from scratch — all Arduino',                 content:'Took me 4 months but it\'s finally cutting. GRBL on an Uno, NEMA17 steppers, A4988 drivers. Cutting area is 300×200mm. First real cut was a PCB outline in MDF. The ArduinoLab stepper lessons saved me so much time figuring out the current limits.',  replies:31, votes:94, views:1240 },
+      { initials:'MM', color:'a3', name:'Maya M.',      time:'6h ago',   tag:'LED',      title:'Infinity mirror clock with 60 WS2812B LEDs',                          content:'Finally finished my infinity mirror clock after two months of weekends. ESP8266 for NTP time sync, 60 NeoPixels arranged in a ring, two-way mirror + regular mirror. Biggest lesson: smooth LED rings need a capacitor on the power rail.',              replies:18, votes:67, views:730 },
+      { initials:'BB', color:'a1', name:'Ben B.',       time:'1d ago',   tag:'IoT',      title:'Plant watering system — away for 3 weeks, zero casualties',            content:'Deployed my auto-watering system before a holiday. Soil moisture sensor + submersible pump + ESP32 with a Telegram bot for status updates. Just got home — all 7 plants alive. The moisture calibration lesson on here was key.',                        replies:24, votes:112, views:1580 },
+      { initials:'SO', color:'a4', name:'Sam O.',       time:'2d ago',   tag:'Robot',    title:'Line-following robot under $12 total',                                 content:'IR sensor array (5 sensors), L298N, two geared motors, old cardboard chassis. Total cost with the Arduino clone: $11.80. Follows a black tape line at a decent speed. Next step is PID control instead of bang-bang.',                                      replies:29, votes:88, views:1100 },
+      { initials:'FV', color:'a2', name:'Freya V.',     time:'3d ago',   tag:'Display',  title:'7-segment stock ticker pulls live prices via ESP8266',                 content:'Four 7-segment displays chained with MAX7219, ESP8266 fetching prices from a free API every 60s. Displays AAPL, TSLA, or whatever you hardcode. Debating whether to add a rotary encoder to switch tickers.',                                          replies:14, votes:41, views:560 },
+      { initials:'OT', color:'a3', name:'Oscar T.',     time:'4d ago',   tag:'Wearable', title:'Gesture-controlled glove that types Morse code',                       content:'Flex sensors on each finger, MPU-6050 on the back. Specific finger combo = dot or dash, held = long press. BLE to PC via HC-05 module. Learned more about debouncing in two weeks than in two years of reading.',                                            replies:20, votes:59, views:780 },
+    ]
+  },
+  'beginner-qs': {
+    title: '# beginner-qs',
+    meta: 'No such thing as a dumb question here.',
+    posts: [
+      { initials:'EP', color:'a3', name:'Ethan P.',     time:'30m ago',  tag:'Question', title:'What resistor do I need for a red LED at 5V?',                         content:'I know LEDs need resistors but I don\'t know how to calculate which one. My LED is red. Arduino is 5V. I don\'t know the LED specs — it came in a pack of 100 with no datasheet.',                                                                        replies:12, votes:5,  views:88  },
+      { initials:'LG', color:'a1', name:'Lily G.',      time:'2h ago',   tag:'Question', title:'Is it safe to power my Arduino from a phone charger?',                 content:'I want to run my project without plugging into a computer. Can I just use any USB phone charger? Does the amperage matter? I have a 5V 2A one and a 5V 1A one.',                                                                                            replies:8,  votes:11, views:145 },
+      { initials:'RM', color:'a2', name:'Ryan M.',      time:'4h ago',   tag:'Solved',   title:'Why does digitalWrite(13, HIGH) not turn on my LED?',                  content:'I\'m on lesson 1. The built-in LED blinks fine but when I put an external LED on pin 13 with a 220Ω resistor it doesn\'t light up. Eventually figured out: I was putting the resistor AFTER the LED (towards GND). Should be between pin and LED.',        replies:5,  votes:18, views:200 },
+      { initials:'HA', color:'a4', name:'Hugo A.',      time:'6h ago',   tag:'Question', title:'What does "avrdude: stk500_recv(): programmer not responding" mean?',   content:'Every time I try to upload I get this error. The board shows up in Device Manager as COM5. I\'ve selected Uno and COM5 in the IDE. This is my first day with Arduino.',                                                                                        replies:14, votes:3,  views:312 },
+      { initials:'ZC', color:'a3', name:'Zoe C.',       time:'1d ago',   tag:'Question', title:'Do I need to understand electronics before starting?',                 content:'Complete beginner. I can code a bit in Python but I know nothing about circuits. Should I learn electronics theory first or just follow the diagrams and pick it up as I go? Worried I\'ll burn something.',                                                  replies:21, votes:34, views:420 },
+      { initials:'JL', color:'a1', name:'Jake L.',      time:'2d ago',   tag:'Solved',   title:'Serial.println() freezes my loop() — SOLVED',                         content:'Was calling Serial.begin(9600) but opening Serial Monitor at 115200. The baud mismatch doesn\'t crash it but the buffer fills up and everything slows to a crawl. Make sure both match.',                                                                         replies:7,  votes:29, views:380 },
+    ]
+  },
+  'servos-motors': {
+    title: '# servos-motors',
+    meta: 'Steppers, servos, DC motors, drivers — it all lives here.',
+    posts: [
+      { initials:'KB', color:'a2', name:'Kai B.',       time:'3h ago',   tag:'Stepper',  title:'Best microstepping setting for quiet operation?',                      content:'Running a NEMA17 with DRV8825. 1/32 microstepping is whisper-quiet but I lose torque noticeably. 1/8 is louder but stronger. Is there a sweet spot people have found for things like camera sliders where noise matters?',                             replies:11, votes:22, views:189 },
+      { initials:'IS', color:'a4', name:'Iris S.',      time:'8h ago',   tag:'Servo',    title:'Parallax standard servo only moves 90° not 180°',                      content:'Using myServo.write(0) and myServo.write(180) but the servo only sweeps about 90°. Is this a library calibration issue? I know some servos need different min/max microseconds.',                                                                           replies:6,  votes:8,  views:97  },
+      { initials:'VN', color:'a1', name:'Victor N.',    time:'1d ago',   tag:'DC',       title:'Motor runs backwards — is it wiring or code?',                         content:'DC motor with L298N. When I call forward() it goes backward and vice versa. Is it easier to swap the wires on the motor terminals or add a NOT somewhere in code?',                                                                                         replies:9,  votes:15, views:167 },
+      { initials:'PH', color:'a3', name:'Priya H.',     time:'2d ago',   tag:'Solved',   title:'Servo destroying itself at startup — detach() was the fix',            content:'On power-up my servo would slam to 0°, making a horrible grinding noise. The problem: I was calling Servo.write() before Servo.attach(). Reversed the order and now it starts smooth every time.',                                                               replies:13, votes:44, views:501 },
+    ]
+  },
+  'sensors': {
+    title: '# sensors',
+    meta: 'Ultrasonic, IR, temperature, pressure — all sensor talk here.',
+    posts: [
+      { initials:'AC', color:'a1', name:'Amir C.',      time:'1h ago',   tag:'Ultrasonic', title:'HC-SR04 reads 2cm when nothing is in front of it',                  content:'Ultrasonic sensor mounted on a robot. It reads 2–5cm constantly with no obstacle present. Tried three different sensors, same result. The wiring matches every diagram I\'ve found. Is there an interference issue?',                                 replies:7,  votes:6,  views:114 },
+      { initials:'GW', color:'a2', name:'Grace W.',     time:'5h ago',   tag:'MPU-6050',  title:'Gyro drift is awful after 30 seconds — any fix?',                     content:'Using MPU-6050 for a self-balancing bot. Works great at first but the angle reading drifts about 5° per minute. I know complementary filters help but I can\'t get the alpha value right. What alpha do you use?',                                    replies:16, votes:28, views:302 },
+      { initials:'BT', color:'a4', name:'Bruno T.',     time:'1d ago',   tag:'Solved',    title:'PIR sensor triggers constantly — delay() was the culprit',            content:'HC-SR501 PIR was triggering every second regardless of movement. Turns out I had a delay(100) in loop() which was re-triggering the read every loop. Added a proper cooldown timer with millis() and it\'s perfect.',                                     replies:10, votes:36, views:410 },
+      { initials:'SL', color:'a3', name:'Sofia L.',     time:'3d ago',   tag:'Question',  title:'Best moisture sensor for outdoor use — capacitive vs resistive?',     content:'Building a garden monitor. Read that resistive sensors corrode fast outdoors. Is capacitive always better? Any specific module recommendations that actually last a season?',                                                                                replies:19, votes:31, views:388 },
+    ]
+  },
+  'iot-wireless': {
+    title: '# iot-wireless',
+    meta: 'ESP8266, ESP32, Bluetooth, MQTT — wireless everything.',
+    posts: [
+      { initials:'HM', color:'a4', name:'Harry M.',     time:'2h ago',   tag:'ESP32',    title:'MQTT messages dropping after ~12 hours uptime',                        content:'ESP32 publishing sensor data every 30s to an MQTT broker. Works great but after about 12 hours it stops publishing. No crash, just silence. Watchdog timer? Memory leak in the MQTT library? WiFi.reconnect() not being called?',                       replies:8,  votes:17, views:198 },
+      { initials:'CY', color:'a1', name:'Clara Y.',     time:'9h ago',   tag:'ESP8266',  title:'Getting ESP8266 on-board LED to stop blinking during WiFi',            content:'NodeMCU ESP8266. The built-in LED flashes constantly during WiFi activity which is fine for debugging but I want it to stop in my final build. pinMode(LED_BUILTIN, INPUT) doesn\'t seem to work.',                                                       replies:5,  votes:9,  views:112 },
+      { initials:'KA', color:'a2', name:'Kofi A.',      time:'2d ago',   tag:'Solved',   title:'Home Assistant integration — ESPHome vs Tasmota for beginners',        content:'Tried both for a simple 4-channel relay board. ESPHome wins for anyone already using HA — the YAML config is intuitive and it auto-discovers everything. Tasmota has more features but the setup is a lot more manual.',                                 replies:24, votes:57, views:712 },
+      { initials:'TF', color:'a3', name:'Tina F.',      time:'4d ago',   tag:'BLE',      title:'Bluetooth range is 2 meters max — expected 10m',                       content:'Using HC-05 module for BLE on Uno. Spec says 10m but I lose connection at 2m through a single wall. Antenna orientation? Power output setting? The baud rate is 9600 for the serial link.',                                                             replies:11, votes:14, views:223 },
+    ]
+  },
+  'code-review': {
+    title: '# code-review',
+    meta: 'Post your sketch, get honest feedback.',
+    posts: [
+      { initials:'WJ', color:'a3', name:'Will J.',      time:'4h ago',   tag:'Review',   title:'Is this state machine approach right for a traffic light?',            content:'Using an enum for states (RED, YELLOW, GREEN) and millis() for timing. No delay() anywhere. Feels clean but the switch/case is 80 lines. Should I use function pointers instead? Happy to paste the full sketch.',                                        replies:9,  votes:21, views:178 },
+      { initials:'AO', color:'a1', name:'Alicia O.',    time:'1d ago',   tag:'Review',   title:'My loop() is 300 lines — how do I break it up?',                       content:'First real project: a greenhouse controller. Temperature, humidity, fan PWM, water pump, LCD — all in loop(). It works but it\'s unreadable. I know functions are the answer but I don\'t know where the boundaries should be.',                      replies:17, votes:38, views:445 },
+      { initials:'DN', color:'a2', name:'Dev N.',       time:'2d ago',   tag:'Solved',   title:'Replaced delay() with millis() — here\'s a pattern that actually works', content:'After three failed attempts I finally have a robust millis() timer pattern. Key insight: store `unsigned long lastTime = 0` globally, not inside loop(). Also cast the interval to unsigned long or you get overflow bugs after 32 seconds.',  replies:28, votes:82, views:940 },
+      { initials:'EC', color:'a4', name:'Emma C.',      time:'5d ago',   tag:'Review',   title:'Is SoftwareSerial causing my sensor reads to lag?',                    content:'GPS module on pins 2,3 via SoftwareSerial. Works, but DHT22 reads occasionally show -1. I think SoftwareSerial\'s timing is blocking the DHT read. Should I move to hardware Serial and use a different pin layout?',                                 replies:6,  votes:12, views:156 },
+    ]
+  }
+};
+
+let _currentChannel = 'project-help';
+
+function switchChannel(id, el) {
+  _currentChannel = id;
+  document.querySelectorAll('.channel').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderCommunityPosts(id);
+}
+
+function renderCommunityPosts(id) {
+  const ch = communityChannels[id] || communityChannels['project-help'];
+  document.getElementById('community-channel-title').textContent = ch.title;
+  document.getElementById('community-channel-meta').textContent  = ch.meta;
+  const colorMap = { a1:'#2D5D3F', a2:'#4A7BA7', a3:'#B8935A', a4:'#9B59B6' };
+  document.getElementById('community-posts').innerHTML = ch.posts.map(p => `
+    <div class="post">
+      <div class="avatar" style="background:${colorMap[p.color]||'#2D5D3F'}">${p.initials}</div>
+      <div class="post-body">
+        <div class="post-head">
+          <span class="name">${p.name}</span>
+          <span class="time">${p.time}</span>
+          <span class="tag">${p.tag}</span>
+        </div>
+        <div class="post-title">${p.title}</div>
+        <div class="post-content">${p.content}</div>
+        <div class="post-footer">
+          <span>💬 ${p.replies} replies</span>
+          <span>↑ ${p.votes}</span>
+          <span>👁 ${p.views} views</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showNewPostModal() {
+  if (!currentProfile?.is_pro) { openAuthModal('signup'); return; }
+  showToast('New post feature coming soon!');
+}
+
+// Init community on page load
+document.addEventListener('DOMContentLoaded', () => renderCommunityPosts('project-help'));
 
 // ===== SETTINGS ==============================================
 
@@ -2771,7 +2913,7 @@ document.addEventListener('DOMContentLoaded', loadSettings);
       <p>Filter by component, difficulty, or what you want to build. Free members get 3 beginner projects.</p>
     </div>
 
-    <div class="upgrade-banner">
+    <div class="upgrade-banner" id="upgrade-banner">
       <div class="upgrade-banner-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2L2 22h20L12 2z"/>
@@ -3083,6 +3225,13 @@ document.addEventListener('DOMContentLoaded', loadSettings);
           <button class="btn" style="width:100%;background:#F2F0EA;color:var(--brand);" onclick="openBot()">Ask the tutor</button>
         </div>
 
+        <div class="viewer-card" style="margin-top:16px;text-align:center;">
+          <button id="complete-btn" onclick="toggleComplete()" style="width:100%;padding:14px;border-radius:4px;border:2px solid var(--brand);background:transparent;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;color:var(--brand);transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Mark as Complete
+          </button>
+        </div>
+
       </div>
     </div>
 
@@ -3094,96 +3243,27 @@ document.addEventListener('DOMContentLoaded', loadSettings);
   <section class="community">
     <div class="community-sidebar">
       <h3>Channels</h3>
-      <div class="channel active"><span class="hash">#</span> project-help <span class="count">24</span></div>
-      <div class="channel"><span class="hash">#</span> show-and-tell <span class="count">41</span></div>
-      <div class="channel"><span class="hash">#</span> beginner-qs <span class="count">18</span></div>
-      <div class="channel"><span class="hash">#</span> servos-motors <span class="count">9</span></div>
-      <div class="channel"><span class="hash">#</span> sensors <span class="count">14</span></div>
-      <div class="channel"><span class="hash">#</span> iot-wireless <span class="count">7</span></div>
-      <div class="channel"><span class="hash">#</span> code-review <span class="count">12</span></div>
+      <div class="channel active" onclick="switchChannel('project-help',this)"><span class="hash">#</span> project-help <span class="count">24</span></div>
+      <div class="channel" onclick="switchChannel('show-and-tell',this)"><span class="hash">#</span> show-and-tell <span class="count">41</span></div>
+      <div class="channel" onclick="switchChannel('beginner-qs',this)"><span class="hash">#</span> beginner-qs <span class="count">18</span></div>
+      <div class="channel" onclick="switchChannel('servos-motors',this)"><span class="hash">#</span> servos-motors <span class="count">9</span></div>
+      <div class="channel" onclick="switchChannel('sensors',this)"><span class="hash">#</span> sensors <span class="count">14</span></div>
+      <div class="channel" onclick="switchChannel('iot-wireless',this)"><span class="hash">#</span> iot-wireless <span class="count">7</span></div>
+      <div class="channel" onclick="switchChannel('code-review',this)"><span class="hash">#</span> code-review <span class="count">12</span></div>
     </div>
 
     <div class="community-main">
       <div class="community-header">
         <div>
-          <h2># project-help</h2>
-          <div class="meta">Got stuck? Ask away. 12,400 members ready to help.</div>
+          <h2 id="community-channel-title"># project-help</h2>
+          <div class="meta" id="community-channel-meta">Got stuck? Ask away. 12,400 members ready to help.</div>
         </div>
-        <button class="btn btn-brand" style="font-size:13px;">+ New post</button>
+        <button class="btn btn-brand" style="font-size:13px;" onclick="showNewPostModal()">+ New post</button>
       </div>
-      <div class="posts">
-        <div class="post">
-          <div class="avatar a1">SK</div>
-          <div class="post-body">
-            <div class="post-head">
-              <span class="name">Sarah K.</span>
-              <span class="time">12m ago</span>
-              <span class="tag">Servo</span>
-            </div>
-            <div class="post-title">SG90 servo jitters at rest — how do I stop it?</div>
-            <div class="post-content">My servo won't sit still. It twitches even when I'm not sending any commands. Power is from a separate 5V supply with common ground to the Arduino. Using the Servo library with attach(9) and write(90). Any ideas?</div>
-            <div class="post-footer">
-              <span>💬 8 replies</span>
-              <span>↑ 12</span>
-              <span>👁 142 views</span>
-            </div>
-          </div>
-        </div>
-        <div class="post">
-          <div class="avatar a2">MT</div>
-          <div class="post-body">
-            <div class="post-head">
-              <span class="name">Marcus T.</span>
-              <span class="time">1h ago</span>
-              <span class="tag">I2C</span>
-            </div>
-            <div class="post-title">I2C OLED display showing garbage characters after update</div>
-            <div class="post-content">Had an OLED working fine for weeks. Updated my Adafruit SSD1306 library and now text is scrambled. Tried rolling back but same issue. Wire.begin() is called, address 0x3C confirmed with scanner...</div>
-            <div class="post-footer">
-              <span>💬 4 replies</span>
-              <span>↑ 6</span>
-              <span>👁 89 views</span>
-            </div>
-          </div>
-        </div>
-        <div class="post">
-          <div class="avatar a3">AL</div>
-          <div class="post-body">
-            <div class="post-head">
-              <span class="name">Ava L.</span>
-              <span class="time">3h ago</span>
-              <span class="tag">Solved</span>
-            </div>
-            <div class="post-title">Stepper motor loses steps under load — SOLVED</div>
-            <div class="post-content">Posting the fix in case anyone else hits this. NEMA17 with A4988 driver was losing steps when it hit resistance. Turned out my current limit was set way too low. Adjusted the Vref pot to 0.7V and it's rock solid now...</div>
-            <div class="post-footer">
-              <span>💬 15 replies</span>
-              <span>↑ 48</span>
-              <span>👁 520 views</span>
-            </div>
-          </div>
-        </div>
-        <div class="post">
-          <div class="avatar a4">JR</div>
-          <div class="post-body">
-            <div class="post-head">
-              <span class="name">Jordan R.</span>
-              <span class="time">5h ago</span>
-              <span class="tag">ESP32</span>
-            </div>
-            <div class="post-title">ESP32 keeps rebooting when WiFi connects — brownout?</div>
-            <div class="post-content">Running a weather station project. ESP32 boots fine, but as soon as WiFi.begin() fires, it resets with "Brownout detector triggered." USB cable is the short one that came with it. Does that matter?</div>
-            <div class="post-footer">
-              <span>💬 11 replies</span>
-              <span>↑ 19</span>
-              <span>👁 203 views</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="posts" id="community-posts"></div>
 
       <!-- LOCK OVERLAY -->
-      <div class="community-lock">
+      <div class="community-lock" id="community-lock-overlay">
         <div class="lock-modal">
           <div class="icon">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -4537,12 +4617,28 @@ void loop(){
   },
 ];
 
+function getCompleted() {
+  try { return new Set(JSON.parse(localStorage.getItem('al_completed') || '[]')); } catch(e) { return new Set(); }
+}
+
 function renderLessons() {
   const grid = document.getElementById('lessons-grid');
-  grid.innerHTML = lessons.map((l, i) => `
-    <div class="lesson ${l.locked ? 'locked' : ''}" onclick="${l.locked ? "goto('pricing')" : `openLesson(${i})`}">
+  const isPro = currentProfile?.is_pro === true;
+  const completed = getCompleted();
+  grid.innerHTML = lessons.map((l, i) => {
+    const done = completed.has(l.id);
+    const accessible = !l.locked || isPro;
+    const topBadge = done
+      ? '<span class="free-badge" style="background:#2D5D3F;color:white;">✓ Done</span>'
+      : l.locked && !isPro
+        ? '<span class="lock-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Pro</span>'
+        : '<span class="free-badge">Free</span>';
+    const footerLabel = done ? '✓ Completed' : l.locked && !isPro ? 'Locked' : isPro ? 'Pro lesson' : 'Free lesson';
+    const clickAction = accessible ? `openLesson(${i})` : "goto('pricing')";
+    return `
+    <div class="lesson ${l.locked && !isPro ? 'locked' : ''} ${done ? 'lesson-done' : ''}" onclick="${clickAction}">
       <div class="lesson-preview">
-        ${l.locked ? '<span class="lock-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Pro</span>' : '<span class="free-badge">Free</span>'}
+        ${topBadge}
         <div class="lesson-thumb" style="background:${l.color}18;">
           <div class="lesson-thumb-icon">${l.icon}</div>
           <div class="lesson-thumb-parts">
@@ -4550,7 +4646,7 @@ function renderLessons() {
             ${l.parts.length > 3 ? `<div class="thumb-part-pill">+${l.parts.length-3} more</div>` : ''}
           </div>
         </div>
-        ${l.locked ? '<div class="lock-center"><span class="lock-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Unlock with Pro</span></div>' : ''}
+        ${l.locked && !isPro ? '<div class="lock-center"><span class="lock-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Unlock with Pro</span></div>' : ''}
       </div>
       <div class="lesson-body">
         <div class="lesson-meta">
@@ -4561,16 +4657,40 @@ function renderLessons() {
         <p>${l.desc}</p>
         <div class="lesson-footer">
           <span class="time">⏱ ${l.time}</span>
-          <span>${l.locked ? 'Locked' : 'Free lesson'}</span>
+          <span style="${done ? 'color:var(--brand);font-weight:600;' : ''}">${footerLabel}</span>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 renderLessons();
 
+let _currentLessonId = null;
+
+function toggleComplete() {
+  if (!_currentLessonId) return;
+  const completed = getCompleted();
+  const btn = document.getElementById('complete-btn');
+  if (completed.has(_currentLessonId)) {
+    completed.delete(_currentLessonId);
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Mark as Complete';
+    btn.style.background = 'transparent';
+    btn.style.color = 'var(--brand)';
+    showToast('Marked as not completed.');
+  } else {
+    completed.add(_currentLessonId);
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Completed!';
+    btn.style.background = 'var(--brand)';
+    btn.style.color = 'white';
+    showToast('✓ Lesson marked as complete!');
+  }
+  localStorage.setItem('al_completed', JSON.stringify([...completed]));
+  renderLessons();
+}
+
 function openLesson(idx) {
   const l = lessons[idx];
+  _currentLessonId = l.id;
   // Parts checklist HTML
   const partsHtml = l.parts.map(p => `
     <label class="part-check-row">
@@ -4604,6 +4724,18 @@ function openLesson(idx) {
   document.getElementById('viewer-parts-count').textContent = l.parts.length + ' parts needed';
   document.getElementById('viewer-wiring-count').textContent = l.wiring.length + ' steps';
   document.getElementById('viewer-code').textContent = l.code;
+  // Update complete button state
+  const completed = getCompleted();
+  const btn = document.getElementById('complete-btn');
+  if (btn) {
+    if (completed.has(l.id)) {
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Completed!';
+      btn.style.background = 'var(--brand)'; btn.style.color = 'white';
+    } else {
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Mark as Complete';
+      btn.style.background = 'transparent'; btn.style.color = 'var(--brand)';
+    }
+  }
   // Wire up checkbox progress
   document.querySelectorAll('.part-check-cb').forEach(cb => {
     cb.addEventListener('change', updatePartsProgress);
