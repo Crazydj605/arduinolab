@@ -1141,20 +1141,36 @@
   .part-check-row {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
-    border-radius: 4px;
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background 0.15s;
     user-select: none;
+    border: 1px solid transparent;
   }
-  .part-check-row:hover { background: var(--surface-2); }
+  .part-check-row:hover { background: var(--surface-2); border-color: var(--line); }
   .part-check-row input[type="checkbox"] { display: none; }
+  .part-check-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    flex-shrink: 0;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    transition: all 0.15s;
+  }
+  .part-check-row input:checked ~ .part-check-icon {
+    opacity: 0.45;
+  }
   .part-check-box {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     border: 1.5px solid var(--line);
-    border-radius: 3px;
+    border-radius: 4px;
     flex-shrink: 0;
     display: grid;
     place-items: center;
@@ -1175,24 +1191,82 @@
     border-left: none;
     transform: rotate(45deg) translate(-1px, -1px);
   }
+  .part-check-info { flex: 1; min-width: 0; }
   .part-check-name {
-    flex: 1;
+    display: block;
     font-size: 14px;
+    font-weight: 500;
     color: var(--ink);
     transition: color 0.15s;
   }
-  .part-check-row input:checked ~ .part-check-box ~ .part-check-name {
+  .part-check-row input:checked ~ .part-check-box ~ .part-check-info .part-check-name {
     color: var(--ink-3);
     text-decoration: line-through;
+  }
+  .part-check-hint {
+    display: block;
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-top: 1px;
   }
   .part-check-qty {
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
-    color: var(--ink-3);
+    font-weight: 600;
+    color: var(--ink-2);
     background: var(--surface-2);
-    padding: 2px 7px;
-    border-radius: 2px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    white-space: nowrap;
   }
+
+  /* ===== SIGN-UP GATE ===== */
+  .library-guest-banner {
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+    border-radius: 8px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+    color: white;
+  }
+  .library-guest-banner h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; color: white; }
+  .library-guest-banner p  { font-size: 14px; opacity: 0.85; margin: 0; }
+  .library-guest-banner .actions { display: flex; gap: 10px; flex-shrink: 0; }
+  .btn-white { background: white; color: var(--brand); border: none; padding: 11px 22px; border-radius: 4px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; transition: opacity 0.15s; }
+  .btn-white:hover { opacity: 0.9; }
+  .btn-white-ghost { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.5); padding: 11px 22px; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; transition: all 0.15s; }
+  .btn-white-ghost:hover { border-color: white; }
+
+  .lessons-gate-wrap { position: relative; }
+  .lessons-gate-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 340px;
+    background: linear-gradient(to bottom, transparent, var(--bg) 60%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 32px;
+    pointer-events: none;
+  }
+  .lessons-gate-overlay .gate-cta {
+    pointer-events: all;
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px 40px;
+    box-shadow: var(--shadow-lg);
+    max-width: 420px;
+    width: 100%;
+  }
+  .lessons-gate-overlay .gate-cta h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .lessons-gate-overlay .gate-cta p  { font-size: 14px; color: var(--ink-3); margin-bottom: 20px; }
+  .lessons-gate-overlay .gate-cta .gate-btns { display: flex; gap: 10px; justify-content: center; }
 
   /* Wiring steps */
   .wiring-steps { display: flex; flex-direction: column; gap: 16px; }
@@ -2054,11 +2128,19 @@ function updateNavUI() {
   }
 
   // Hide upgrade banner and community lock for pro users
-  const banner = document.getElementById('upgrade-banner');
-  if (banner) banner.style.display = isPro ? 'none' : '';
+  const upgradeBanner = document.getElementById('upgrade-banner');
+  if (upgradeBanner) upgradeBanner.style.display = isPro ? 'none' : '';
 
   const commLock = document.getElementById('community-lock-overlay');
   if (commLock) commLock.style.display = isPro ? 'none' : '';
+
+  // Guest sign-up banner — only for non-signed-in visitors
+  const guestBanner = document.getElementById('library-guest-banner');
+  if (guestBanner) guestBanner.style.display = currentUser ? 'none' : 'flex';
+
+  // Lesson gate overlay — only for non-signed-in visitors
+  const gateOverlay = document.getElementById('lessons-gate-overlay');
+  if (gateOverlay) gateOverlay.style.display = currentUser ? 'none' : 'flex';
 
   // Refresh lesson cards to show correct labels
   renderLessons();
@@ -2274,14 +2356,17 @@ window.addEventListener('load', () => {
     openLesson = async function(idx) {
       const l = lessons[idx];
 
-      // Free lessons — no check needed
+      // Everyone must be signed in — no anonymous lesson access
+      const { data: { user } } = await supa.auth.getUser();
+      if (!user) {
+        openAuthModal('signup');
+        return;
+      }
+
+      // Free lessons are accessible to all signed-in users
       if (_freeIds.has(l.id)) { _orig(idx); return; }
 
-      // Verify the session JWT with Supabase (cannot be spoofed client-side)
-      const { data: { user } } = await supa.auth.getUser();
-      if (!user) { openAuthModal('signup'); return; }
-
-      // Re-fetch is_pro from the server for this verified user
+      // Pro lessons — re-fetch is_pro from the server (cannot be spoofed client-side)
       try {
         const { data } = await supa
           .from('profiles')
@@ -2913,6 +2998,18 @@ document.addEventListener('DOMContentLoaded', loadSettings);
       <p>Filter by component, difficulty, or what you want to build. Free members get 3 beginner projects.</p>
     </div>
 
+    <!-- Guest sign-up banner (hidden for signed-in users) -->
+    <div class="library-guest-banner" id="library-guest-banner" style="display:none;">
+      <div>
+        <h3>👋 Create a free account to start building</h3>
+        <p>3 free lessons included. No credit card. Takes 30 seconds.</p>
+      </div>
+      <div class="actions">
+        <button class="btn-white" onclick="openAuthModal('signup')">Sign up free →</button>
+        <button class="btn-white-ghost" onclick="openAuthModal('signin')">Sign in</button>
+      </div>
+    </div>
+
     <div class="upgrade-banner" id="upgrade-banner">
       <div class="upgrade-banner-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2939,7 +3036,19 @@ document.addEventListener('DOMContentLoaded', loadSettings);
       <button class="chip" data-filter="wireless">Wireless</button>
     </div>
 
-    <div class="lessons" id="lessons-grid"></div>
+    <div class="lessons-gate-wrap">
+      <div class="lessons" id="lessons-grid"></div>
+      <div class="lessons-gate-overlay" id="lessons-gate-overlay" style="display:none;">
+        <div class="gate-cta">
+          <h3>340+ projects waiting for you</h3>
+          <p>Free account gets you 3 lessons. Pro unlocks everything. No card required to sign up.</p>
+          <div class="gate-btns">
+            <button class="btn btn-brand" onclick="openAuthModal('signup')">Create free account →</button>
+            <button class="btn btn-ghost" onclick="openAuthModal('signin')">Sign in</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </div>
 
@@ -4664,6 +4773,77 @@ function renderLessons() {
   }).join('');
 }
 renderLessons();
+// Show gate and guest banner immediately for non-signed-in state (before Supabase resolves)
+document.addEventListener('DOMContentLoaded', () => {
+  if (!currentUser) {
+    const g = document.getElementById('library-guest-banner');
+    const o = document.getElementById('lessons-gate-overlay');
+    if (g) g.style.display = 'flex';
+    if (o) o.style.display = 'flex';
+  }
+});
+
+function getPartIcon(name) {
+  const n = name.toLowerCase();
+  if (n.includes('arduino') || n.includes('uno') || n.includes('nano') || n.includes('mega') || n.includes('micro')) return '🟢';
+  if (n.includes('esp32') || n.includes('esp8266') || n.includes('nodemcu')) return '📶';
+  if (n.includes('neopixel') || n.includes('ws2812') || n.includes('rgb led')) return '🌈';
+  if (n.includes('red led')) return '🔴';
+  if (n.includes('green led')) return '🟢';
+  if (n.includes('yellow led') || n.includes('amber led')) return '🟡';
+  if (n.includes('blue led')) return '🔵';
+  if (n.includes('led')) return '💡';
+  if (n.includes('resistor')) return '〰️';
+  if (n.includes('breadboard')) return '🔲';
+  if (n.includes('servo')) return '⚙️';
+  if (n.includes('stepper')) return '🔩';
+  if (n.includes('dc motor') || n.includes('motor')) return '🔄';
+  if (n.includes('button') || n.includes('pushbutton') || n.includes('switch')) return '🔘';
+  if (n.includes('capacitor')) return '⚡';
+  if (n.includes('buzzer') || n.includes('piezo') || n.includes('speaker')) return '🔔';
+  if (n.includes('oled') || n.includes('lcd') || n.includes('display') || n.includes('screen')) return '🖥️';
+  if (n.includes('potentiometer') || n.includes('trimmer') || n.includes('trimpot')) return '🎛️';
+  if (n.includes('ultrasonic') || n.includes('hc-sr04')) return '📡';
+  if (n.includes('pir') || n.includes('motion')) return '👁️';
+  if (n.includes('dht') || n.includes('temperature') || n.includes('humidity')) return '🌡️';
+  if (n.includes('soil') || n.includes('moisture')) return '🌱';
+  if (n.includes('ir') || n.includes('infrared')) return '🔦';
+  if (n.includes('relay')) return '🔀';
+  if (n.includes('transistor') || n.includes('mosfet') || n.includes('bjt')) return '📐';
+  if (n.includes('mpu') || n.includes('gyro') || n.includes('accelero') || n.includes('imu')) return '🧭';
+  if (n.includes('rfid') || n.includes('nfc')) return '📲';
+  if (n.includes('bluetooth') || n.includes('hc-05') || n.includes('hc-06')) return '📱';
+  if (n.includes('l298') || n.includes('a4988') || n.includes('drv8') || n.includes('driver')) return '🎛️';
+  if (n.includes('power supply') || n.includes('battery') || n.includes('9v') || n.includes('12v')) return '🔋';
+  if (n.includes('usb cable') || n.includes('usb-b') || n.includes('usb-c')) return '🔌';
+  if (n.includes('wire') || n.includes('jumper') || n.includes('cable')) return '〰️';
+  if (n.includes('diode') || n.includes('1n40')) return '➡️';
+  if (n.includes('photoresistor') || n.includes('ldr') || n.includes('light sensor')) return '☀️';
+  return '🔧';
+}
+
+function getPartHint(name) {
+  const n = name.toLowerCase();
+  if (n.includes('arduino uno')) return 'The main microcontroller board';
+  if (n.includes('arduino nano')) return 'Compact microcontroller board';
+  if (n.includes('arduino mega')) return 'Large board with more pins';
+  if (n.includes('breadboard')) return 'Solderless prototyping board — rows a–e and f–j are connected';
+  if (n.includes('resistor')) return 'Limits current — check the colour bands for value';
+  if (n.includes('led')) return 'Long leg = anode (+), short leg = cathode (−)';
+  if (n.includes('servo')) return 'Brown = GND, Red = 5V, Orange = signal';
+  if (n.includes('jumper') || n.includes('wire')) return 'Any colour works — use red for 5V, black for GND';
+  if (n.includes('usb cable')) return 'For power and uploading sketches';
+  if (n.includes('button') || n.includes('pushbutton')) return 'Legs on the same side are always connected';
+  if (n.includes('buzzer') || n.includes('piezo')) return 'Longer leg is positive (+)';
+  if (n.includes('potentiometer')) return '3 pins: GND, signal (middle), 5V';
+  if (n.includes('capacitor')) return 'Polarised — white stripe = negative side';
+  if (n.includes('hc-sr04')) return 'VCC to 5V, Trig and Echo to digital pins, GND to GND';
+  if (n.includes('dht22') || n.includes('dht11')) return 'Needs a 10kΩ pull-up on the data pin';
+  if (n.includes('relay')) return 'Needs a flyback diode for inductive loads';
+  if (n.includes('l298n')) return 'Dual H-bridge — can drive 2 DC motors or 1 stepper';
+  if (n.includes('neopixel') || n.includes('ws2812')) return 'Data pin needs a 300–500Ω series resistor';
+  return 'Check the wiring steps below for exact placement';
+}
 
 let _currentLessonId = null;
 
@@ -4695,8 +4875,12 @@ function openLesson(idx) {
   const partsHtml = l.parts.map(p => `
     <label class="part-check-row">
       <input type="checkbox" class="part-check-cb">
+      <span class="part-check-icon">${getPartIcon(p.name)}</span>
       <span class="part-check-box"></span>
-      <span class="part-check-name">${p.name}</span>
+      <span class="part-check-info">
+        <span class="part-check-name">${p.name}</span>
+        <span class="part-check-hint">${getPartHint(p.name)}</span>
+      </span>
       <span class="part-check-qty">×${p.qty}</span>
     </label>
   `).join('');
