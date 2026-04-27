@@ -1779,6 +1779,170 @@
   #auth-modal.open { display: grid !important; }
   #user-menu.open { display: block !important; }
 
+  /* ===== DARK MODE ===== */
+  [data-theme="dark"] {
+    --bg: #151A17;
+    --surface: #1E2621;
+    --surface-2: #262E29;
+    --ink: #EDE9DF;
+    --ink-2: #B4C2BA;
+    --ink-3: #738078;
+    --line: #2E3A34;
+    --brand: #4FA86E;
+    --brand-dark: #3D8F5A;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.4);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.5);
+  }
+  [data-theme="dark"] nav {
+    background: rgba(21,26,23,0.9);
+  }
+
+  /* ===== FONT SIZE CLASSES ===== */
+  .fs-small  { font-size: 13px; }
+  .fs-medium { font-size: 15px; }
+  .fs-large  { font-size: 17px; }
+
+  /* ===== COMPACT MODE ===== */
+  .compact .hero         { padding-top: 40px; padding-bottom: 20px; }
+  .compact .section      { padding-top: 40px; padding-bottom: 40px; }
+  .compact .lesson       { padding: 0; }
+
+  /* ===== REDUCE MOTION ===== */
+  .no-motion *, .no-motion *::before, .no-motion *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* ===== SETTINGS PAGE ===== */
+  .settings-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .settings-sidebar {
+    position: sticky;
+    top: 80px;
+  }
+  .settings-sidebar-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: var(--ink);
+  }
+  .settings-nav { display: flex; flex-direction: column; gap: 2px; }
+  .settings-nav-item {
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-2);
+    cursor: pointer;
+    border: none;
+    background: none;
+    text-align: left;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .settings-nav-item:hover { background: var(--surface-2); color: var(--ink); }
+  .settings-nav-item.active { background: var(--surface-2); color: var(--brand); font-weight: 600; }
+
+  .settings-content { display: flex; flex-direction: column; gap: 48px; }
+  .settings-section { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .settings-section-head {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .settings-section-head h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  .settings-section-head p  { font-size: 13px; color: var(--ink-3); }
+
+  .setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--line);
+    gap: 24px;
+  }
+  .setting-row:last-child { border-bottom: none; }
+  .setting-row-info { flex: 1; }
+  .setting-row-info label { display: block; font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 2px; cursor: pointer; }
+  .setting-row-info span  { font-size: 13px; color: var(--ink-3); }
+
+  /* Toggle switch */
+  .toggle { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0;
+    background: var(--line);
+    border-radius: 22px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    left: 3px; bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.2s;
+  }
+  .toggle input:checked + .toggle-slider { background: var(--brand); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+  /* Radio group */
+  .setting-radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .setting-radio-btn {
+    padding: 7px 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--ink-2);
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .setting-radio-btn:hover { border-color: var(--brand); color: var(--ink); }
+  .setting-radio-btn.active { border-color: var(--brand); background: var(--brand); color: white; }
+
+  /* Settings input */
+  .setting-input {
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--surface);
+    color: var(--ink);
+    outline: none;
+    min-width: 220px;
+    transition: border-color 0.15s;
+  }
+  .setting-input:focus { border-color: var(--brand); }
+
+  /* Danger button */
+  .btn-danger { background: #FEE2E2; color: #A64040; border: 1px solid #FECACA; padding: 9px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .btn-danger:hover { background: #FECACA; }
+  .btn-success { background: var(--brand); color: white; border: none; padding: 9px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .btn-success:hover { background: var(--brand-dark); }
+  .btn-outline { background: transparent; color: var(--ink-2); border: 1px solid var(--line); padding: 9px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+  .btn-outline:hover { border-color: var(--ink); color: var(--ink); }
+
+  .settings-saved-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--brand); font-weight: 500;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .settings-saved-badge.show { opacity: 1; }
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -2118,6 +2282,238 @@ window.addEventListener('load', () => {
   }
 });
 
+// ===== SETTINGS ==============================================
+
+function showSettingsSection(id, btn) {
+  document.querySelectorAll('.settings-section').forEach(s => s.style.display = 'none');
+  document.getElementById('ss-' + id).style.display = 'block';
+  document.querySelectorAll('.settings-nav-item').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// Load saved settings and apply on page load
+function loadSettings() {
+  const s = JSON.parse(localStorage.getItem('al_settings') || '{}');
+
+  // Theme
+  const theme = s.theme || 'light';
+  applyThemeNow(theme);
+  document.querySelectorAll('#theme-group .setting-radio-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.val === theme);
+  });
+
+  // Font size
+  const fs = s.fontSize || 'medium';
+  document.body.classList.remove('fs-small','fs-medium','fs-large');
+  document.body.classList.add('fs-' + fs);
+  document.querySelectorAll('#fontsize-group .setting-radio-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.val === fs);
+  });
+
+  // Compact
+  if (s.compact) { document.body.classList.add('compact'); }
+  const tc = document.getElementById('toggle-compact');
+  if (tc) tc.checked = !!s.compact;
+
+  // Reduce motion
+  if (s.reduceMotion) { document.body.classList.add('no-motion'); }
+  const tm = document.getElementById('toggle-motion');
+  if (tm) tm.checked = !!s.reduceMotion;
+
+  // Toggles
+  const toggleMap = {
+    'toggle-sidebar':        'showNavLabels',
+    'notif-new-projects':    'notifNewProjects',
+    'notif-community':       'notifCommunity',
+    'notif-digest':          'notifDigest',
+    'notif-tips':            'notifTips',
+    'notif-marketing':       'notifMarketing',
+    'toggle-times':          'showTimes',
+    'toggle-partcount':      'showPartCount',
+    'toggle-sound':          'completionSound',
+    'toggle-autoopen':       'autoOpenTutor',
+    'toggle-hints':          'showHints',
+    'toggle-chat-history':   'chatHistory',
+    'toggle-code-suggestions':'codeSuggestions',
+    'toggle-online':         'showOnline',
+    'toggle-analytics':      'analytics',
+  };
+  for (const [id, key] of Object.entries(toggleMap)) {
+    const el = document.getElementById(id);
+    if (el && key in s) el.checked = s[key];
+  }
+
+  // Difficulty
+  const diff = s.defaultDifficulty || 'all';
+  document.querySelectorAll('#difficulty-group .setting-radio-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.val === diff);
+  });
+
+  // Tutor style
+  const ts = s.tutorStyle || 'balanced';
+  document.querySelectorAll('#tutor-style-group .setting-radio-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.val === ts);
+  });
+
+  // Visibility
+  const vis = s.visibility || 'public';
+  document.querySelectorAll('#visibility-group .setting-radio-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.val === vis);
+  });
+
+  // Display name
+  const dn = document.getElementById('settings-display-name');
+  if (dn && s.displayName) dn.value = s.displayName;
+}
+
+function savePref(key, value) {
+  const s = JSON.parse(localStorage.getItem('al_settings') || '{}');
+  s[key] = value;
+  localStorage.setItem('al_settings', JSON.stringify(s));
+}
+
+function applyThemeNow(theme) {
+  if (theme === 'system') {
+    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  } else {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+}
+
+function setTheme(val, btn) {
+  document.querySelectorAll('#theme-group .setting-radio-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  savePref('theme', val);
+  applyThemeNow(val);
+}
+
+function setFontSize(val, btn) {
+  document.querySelectorAll('#fontsize-group .setting-radio-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.body.classList.remove('fs-small','fs-medium','fs-large');
+  document.body.classList.add('fs-' + val);
+  savePref('fontSize', val);
+}
+
+function setCompact(val) {
+  document.body.classList.toggle('compact', val);
+  savePref('compact', val);
+}
+
+function setReduceMotion(val) {
+  document.body.classList.toggle('no-motion', val);
+  savePref('reduceMotion', val);
+}
+
+function setDifficulty(val, btn) {
+  document.querySelectorAll('#difficulty-group .setting-radio-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  savePref('defaultDifficulty', val);
+}
+
+function setTutorStyle(val, btn) {
+  document.querySelectorAll('#tutor-style-group .setting-radio-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  savePref('tutorStyle', val);
+}
+
+function setVisibility(val, btn) {
+  document.querySelectorAll('#visibility-group .setting-radio-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  savePref('visibility', val);
+}
+
+function saveDisplayName() {
+  const val = document.getElementById('settings-display-name').value.trim();
+  if (!val) return;
+  savePref('displayName', val);
+  // Update Supabase user metadata
+  supa.auth.updateUser({ data: { display_name: val } });
+  const badge = document.getElementById('name-saved-badge');
+  badge.classList.add('show');
+  setTimeout(() => badge.classList.remove('show'), 2500);
+}
+
+function sendPasswordReset() {
+  if (!currentUser) return;
+  const email = currentUser.email;
+  const redirectTo = window.location.origin + window.location.pathname;
+  supa.auth.resetPasswordForEmail(email, { redirectTo })
+    .then(({ error }) => {
+      if (error) showToast('Error: ' + error.message);
+      else showToast('📧 Password reset email sent to ' + email);
+    });
+}
+
+async function signOutAllDevices() {
+  await supa.auth.signOut({ scope: 'global' });
+  showToast('Signed out of all devices.');
+}
+
+function clearChatFromSettings() {
+  const box = document.getElementById('botMessages');
+  if (box) {
+    box.innerHTML = '<div class="msg msg-bot">Chat cleared. What are you working on?</div>';
+    showToast('Chat history cleared.');
+  }
+}
+
+function exportUserData() {
+  const s = JSON.parse(localStorage.getItem('al_settings') || '{}');
+  const data = {
+    exportedAt: new Date().toISOString(),
+    email: currentUser?.email || null,
+    userId: currentUser?.id || null,
+    settings: s,
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'arduinolab-data.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Data exported successfully.');
+}
+
+function confirmDeleteAccount() {
+  const confirmed = window.confirm(
+    'Are you sure you want to delete your account?\n\nThis will permanently erase your account and cannot be undone.'
+  );
+  if (!confirmed) return;
+  const confirmed2 = window.confirm('Last chance — this is permanent. Delete account?');
+  if (!confirmed2) return;
+  supa.auth.admin?.deleteUser(currentUser.id).catch(() => {});
+  supa.auth.signOut();
+  showToast('Account deleted. Sorry to see you go.');
+  goto('home');
+}
+
+// Populate account info when settings page is opened
+const _origGoto = goto;
+function goto(page) {
+  _origGoto(page);
+  if (page === 'settings') {
+    if (!currentUser) { openAuthModal('signin'); goto('home'); return; }
+    // Populate account section
+    const emailEl = document.getElementById('settings-email-display');
+    if (emailEl) emailEl.textContent = currentUser.email || '—';
+    const proTag = document.getElementById('settings-pro-tag');
+    if (proTag) proTag.style.display = currentProfile?.is_pro ? 'inline-block' : 'none';
+    const methodEl = document.getElementById('settings-signin-method');
+    if (methodEl) {
+      const identities = currentUser.identities || [];
+      const methods = identities.map(i => i.provider === 'google' ? 'Google' : 'Email & password');
+      methodEl.textContent = methods.join(', ') || 'Email & password';
+    }
+    // Reset to account section
+    showSettingsSection('account', document.querySelector('.settings-nav-item'));
+  }
+}
+
+// Apply settings on load
+document.addEventListener('DOMContentLoaded', loadSettings);
+
 </script>
 </head>
 <body>
@@ -2147,8 +2543,9 @@ window.addEventListener('load', () => {
         <div id="user-menu" style="display:none;position:absolute;top:56px;right:32px;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:8px;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,0.1);z-index:200;">
           <div id="user-menu-email" style="font-size:12px;color:var(--ink-3);padding:8px 10px 12px;border-bottom:1px solid var(--line);margin-bottom:6px;"></div>
           <div id="user-menu-pro-badge" style="display:none;background:#E0EDE4;color:#2D5D3F;font-size:11px;font-weight:600;padding:4px 10px;border-radius:2px;margin:0 6px 8px;text-align:center;letter-spacing:0.05em;">PRO MEMBER — ALL LESSONS UNLOCKED</div>
-          <button onclick="goto('library')" style="width:100%;text-align:left;padding:8px 10px;background:none;border:none;font-family:inherit;font-size:13px;cursor:pointer;border-radius:2px;color:var(--ink);" onmouseover="this.style.background='var(--surface-2)'" onmouseout="this.style.background='none'">Library</button>
-          <button onclick="goto('pricing')" style="width:100%;text-align:left;padding:8px 10px;background:none;border:none;font-family:inherit;font-size:13px;cursor:pointer;border-radius:2px;color:var(--ink);" onmouseover="this.style.background='var(--surface-2)'" onmouseout="this.style.background='none'">Upgrade to Pro</button>
+          <button onclick="goto('library');toggleUserMenu()" style="width:100%;text-align:left;padding:8px 10px;background:none;border:none;font-family:inherit;font-size:13px;cursor:pointer;border-radius:2px;color:var(--ink);" onmouseover="this.style.background='var(--surface-2)'" onmouseout="this.style.background='none'">Library</button>
+          <button onclick="goto('pricing');toggleUserMenu()" style="width:100%;text-align:left;padding:8px 10px;background:none;border:none;font-family:inherit;font-size:13px;cursor:pointer;border-radius:2px;color:var(--ink);" onmouseover="this.style.background='var(--surface-2)'" onmouseout="this.style.background='none'">Upgrade to Pro</button>
+          <button onclick="goto('settings');toggleUserMenu()" style="width:100%;text-align:left;padding:8px 10px;background:none;border:none;font-family:inherit;font-size:13px;cursor:pointer;border-radius:2px;color:var(--ink);" onmouseover="this.style.background='var(--surface-2)'" onmouseout="this.style.background='none'">Settings</button>
           <div style="border-top:1px solid var(--line);margin:6px 0;"></div>
           <button onclick="signOut()" style="width:100%;text-align:left;padding:8px 10px;background:none;border:none;font-family:inherit;font-size:13px;cursor:pointer;border-radius:2px;color:#A64040;" onmouseover="this.style.background='var(--surface-2)'" onmouseout="this.style.background='none'">Sign out</button>
         </div>
@@ -2856,6 +3253,394 @@ window.addEventListener('load', () => {
       </div>
     </div>
   </section>
+</div>
+
+<!-- ==================== SETTINGS PAGE ==================== -->
+<div class="page" id="page-settings">
+  <div class="settings-wrap">
+
+    <!-- Sidebar -->
+    <aside class="settings-sidebar">
+      <div class="settings-sidebar-title">Settings</div>
+      <nav class="settings-nav">
+        <button class="settings-nav-item active" onclick="showSettingsSection('account',this)">Account</button>
+        <button class="settings-nav-item" onclick="showSettingsSection('appearance',this)">Appearance</button>
+        <button class="settings-nav-item" onclick="showSettingsSection('notifications',this)">Notifications</button>
+        <button class="settings-nav-item" onclick="showSettingsSection('learning',this)">Learning</button>
+        <button class="settings-nav-item" onclick="showSettingsSection('tutor',this)">AI Tutor</button>
+        <button class="settings-nav-item" onclick="showSettingsSection('privacy',this)">Privacy & Data</button>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <div class="settings-content">
+
+      <!-- ── ACCOUNT ── -->
+      <div class="settings-section" id="ss-account">
+        <div class="settings-section-head">
+          <h3>Account</h3>
+          <p>Manage your profile and login details.</p>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label>Email address</label>
+            <span id="settings-email-display">—</span>
+          </div>
+          <span id="settings-pro-tag" style="display:none;background:#E0EDE4;color:#2D5D3F;font-size:11px;font-weight:600;padding:4px 10px;border-radius:2px;letter-spacing:0.05em;">PRO</span>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="settings-display-name">Display name</label>
+            <span>Shown in community posts and leaderboards.</span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input class="setting-input" id="settings-display-name" type="text" placeholder="Your name" maxlength="30">
+            <button class="btn-success" onclick="saveDisplayName()">Save</button>
+            <span class="settings-saved-badge" id="name-saved-badge">✓ Saved</span>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label>Change password</label>
+            <span>We'll send a reset link to your email.</span>
+          </div>
+          <button class="btn-outline" onclick="sendPasswordReset()">Send reset email</button>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label>Sign in method</label>
+            <span id="settings-signin-method">—</span>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label>Active sessions</label>
+            <span>Sign out of all other devices and browsers.</span>
+          </div>
+          <button class="btn-outline" onclick="signOutAllDevices()">Sign out everywhere</button>
+        </div>
+      </div>
+
+      <!-- ── APPEARANCE ── -->
+      <div class="settings-section" id="ss-appearance" style="display:none;">
+        <div class="settings-section-head">
+          <h3>Appearance</h3>
+          <p>Customize how ArduinoLab looks and feels.</p>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label>Theme</label>
+            <span>Choose light, dark, or follow your system.</span>
+          </div>
+          <div class="setting-radio-group" id="theme-group">
+            <button class="setting-radio-btn active" data-val="light" onclick="setTheme('light',this)">Light</button>
+            <button class="setting-radio-btn" data-val="dark" onclick="setTheme('dark',this)">Dark</button>
+            <button class="setting-radio-btn" data-val="system" onclick="setTheme('system',this)">System</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label>Font size</label>
+            <span>Adjust the text size across the whole site.</span>
+          </div>
+          <div class="setting-radio-group" id="fontsize-group">
+            <button class="setting-radio-btn" data-val="small" onclick="setFontSize('small',this)">Small</button>
+            <button class="setting-radio-btn active" data-val="medium" onclick="setFontSize('medium',this)">Medium</button>
+            <button class="setting-radio-btn" data-val="large" onclick="setFontSize('large',this)">Large</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="toggle-compact">Compact mode</label>
+            <span>Reduce whitespace and padding everywhere.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-compact" onchange="setCompact(this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="toggle-motion">Reduce animations</label>
+            <span>Turn off transitions and motion effects.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-motion" onchange="setReduceMotion(this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="toggle-sidebar">Show sidebar nav labels</label>
+            <span>Display text labels next to nav icons.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-sidebar" checked onchange="savePref('showNavLabels',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- ── NOTIFICATIONS ── -->
+      <div class="settings-section" id="ss-notifications" style="display:none;">
+        <div class="settings-section-head">
+          <h3>Notifications</h3>
+          <p>Control what emails ArduinoLab sends you.</p>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="notif-new-projects">New projects added</label>
+            <span>Get notified when new lessons are published.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notif-new-projects" checked onchange="savePref('notifNewProjects',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="notif-community">Community replies</label>
+            <span>Email me when someone replies to my posts.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notif-community" checked onchange="savePref('notifCommunity',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="notif-digest">Weekly digest</label>
+            <span>A roundup of top community posts each week.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notif-digest" onchange="savePref('notifDigest',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="notif-tips">Learning tips</label>
+            <span>Occasional tips to help you build faster.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notif-tips" checked onchange="savePref('notifTips',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="notif-marketing">Product updates</label>
+            <span>Hear about new features and improvements.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="notif-marketing" checked onchange="savePref('notifMarketing',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- ── LEARNING ── -->
+      <div class="settings-section" id="ss-learning" style="display:none;">
+        <div class="settings-section-head">
+          <h3>Learning Preferences</h3>
+          <p>Tailor how lessons and the library are presented to you.</p>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label>Default difficulty</label>
+            <span>Which level to show first in the library.</span>
+          </div>
+          <div class="setting-radio-group" id="difficulty-group">
+            <button class="setting-radio-btn active" data-val="all" onclick="setDifficulty('all',this)">All</button>
+            <button class="setting-radio-btn" data-val="beginner" onclick="setDifficulty('beginner',this)">Beginner</button>
+            <button class="setting-radio-btn" data-val="intermediate" onclick="setDifficulty('intermediate',this)">Intermediate</button>
+            <button class="setting-radio-btn" data-val="advanced" onclick="setDifficulty('advanced',this)">Advanced</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="toggle-times">Show time estimates</label>
+            <span>Display how long each lesson takes.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-times" checked onchange="savePref('showTimes',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="toggle-partcount">Show part count</label>
+            <span>Display how many components each lesson needs.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-partcount" checked onchange="savePref('showPartCount',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="toggle-sound">Completion sound</label>
+            <span>Play a sound when you finish a lesson.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-sound" onchange="savePref('completionSound',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="toggle-autoopen">Auto-open AI tutor on lessons</label>
+            <span>Automatically open the AI chat when you start a lesson.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-autoopen" onchange="savePref('autoOpenTutor',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="toggle-hints">Show wiring hints</label>
+            <span>Show colour-coded hints on circuit diagrams.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-hints" checked onchange="savePref('showHints',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- ── AI TUTOR ── -->
+      <div class="settings-section" id="ss-tutor" style="display:none;">
+        <div class="settings-section-head">
+          <h3>AI Tutor</h3>
+          <p>Adjust how Arc, your AI tutor, talks to you.</p>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label>Response style</label>
+            <span>How Arc explains things to you.</span>
+          </div>
+          <div class="setting-radio-group" id="tutor-style-group">
+            <button class="setting-radio-btn active" data-val="balanced" onclick="setTutorStyle('balanced',this)">Balanced</button>
+            <button class="setting-radio-btn" data-val="detailed" onclick="setTutorStyle('detailed',this)">Detailed</button>
+            <button class="setting-radio-btn" data-val="concise" onclick="setTutorStyle('concise',this)">Concise</button>
+            <button class="setting-radio-btn" data-val="eli5" onclick="setTutorStyle('eli5',this)">Simple (ELI5)</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="toggle-chat-history">Remember chat history</label>
+            <span>Arc will remember context between sessions.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-chat-history" checked onchange="savePref('chatHistory',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="toggle-code-suggestions">Show code suggestions</label>
+            <span>Arc will proactively suggest code improvements.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-code-suggestions" checked onchange="savePref('codeSuggestions',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label>Clear chat history</label>
+            <span>Wipe all messages from the AI tutor panel.</span>
+          </div>
+          <button class="btn-outline" onclick="clearChatFromSettings()">Clear history</button>
+        </div>
+      </div>
+
+      <!-- ── PRIVACY & DATA ── -->
+      <div class="settings-section" id="ss-privacy" style="display:none;">
+        <div class="settings-section-head">
+          <h3>Privacy &amp; Data</h3>
+          <p>Control your data and account visibility.</p>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label>Profile visibility</label>
+            <span>Who can see your profile in the community.</span>
+          </div>
+          <div class="setting-radio-group" id="visibility-group">
+            <button class="setting-radio-btn active" data-val="public" onclick="setVisibility('public',this)">Public</button>
+            <button class="setting-radio-btn" data-val="members" onclick="setVisibility('members',this)">Members only</button>
+            <button class="setting-radio-btn" data-val="private" onclick="setVisibility('private',this)">Private</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="toggle-online">Show online status</label>
+            <span>Let other members see when you're active.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-online" checked onchange="savePref('showOnline',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label for="toggle-analytics">Usage analytics</label>
+            <span>Help us improve by sharing anonymous usage data.</span>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-analytics" checked onchange="savePref('analytics',this.checked)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label>Export my data</label>
+            <span>Download all your profile and settings data as JSON.</span>
+          </div>
+          <button class="btn-outline" onclick="exportUserData()">Export data</button>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <label style="color:#A64040;">Delete account</label>
+            <span>Permanently delete your account and all data. This cannot be undone.</span>
+          </div>
+          <button class="btn-danger" onclick="confirmDeleteAccount()">Delete account</button>
+        </div>
+      </div>
+
+    </div><!-- /settings-content -->
+  </div><!-- /settings-wrap -->
 </div>
 
 <!-- ==================== AI BOT (FLOATING) ==================== -->
